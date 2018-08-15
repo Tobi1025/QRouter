@@ -3,6 +3,7 @@ package com.personal.joefly.routerdemo.model;
 import java.util.HashMap;
 
 /**
+ * 页面跳转时将参数存入map进行传递
  * Created by qiaojingfei on 2018/8/1.
  */
 

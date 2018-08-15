@@ -7,3 +7,7 @@
 /build
 /captures
 .externalNativeBuild
+/.idea/
+.idea/markdown-navigator.xml
+app/libs/
+app/src/main/res/drawable/
