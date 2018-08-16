@@ -13,7 +13,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RouterParam {
-//    int[] array() default {};
+    //通过Map传递单个或多个参数
     Class getDataModel() default JumpDataModel.class;
+    //通过String传递单个或多个参数
     String value() default "" ;
 }

@@ -1,5 +1,6 @@
 package com.personal.joefly.routerdemo.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -7,16 +8,14 @@ import java.util.HashMap;
  * Created by qiaojingfei on 2018/8/1.
  */
 
-public class JumpDataModel {
-    private HashMap<String, String> data = new HashMap<>();
-    private static final JumpDataModel ourInstance = new JumpDataModel();
-
-    private JumpDataModel() {
-    }
+public class JumpDataModel implements Serializable {
+    public static String KEY = JumpDataModel.class.getSimpleName();
 
     public static JumpDataModel getInstance() {
-        return ourInstance;
+        return new JumpDataModel();
     }
+
+    private HashMap<String, String> data = new HashMap<>();
 
     public void setData(HashMap<String, String> data) {
         this.data = data;

@@ -20,8 +20,8 @@ import java.util.List;
 
 public class AnnotationParse {
     private String url = "";
+    private JumpDataModel paramsModel;
     private String mAction = Intent.ACTION_VIEW;
-    private PackageManager packageManager;
     private RouterBuilder builder;
 
     public AnnotationParse(RouterBuilder builder) {
@@ -43,6 +43,9 @@ public class AnnotationParse {
     public boolean toRoute() {
         PackageManager packageManager = builder.applicationContext.getPackageManager();
         Intent intent = new Intent(mAction, Uri.parse(url));
+        if (paramsModel != null) {
+            intent.putExtra(JumpDataModel.KEY, paramsModel);
+        }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
         boolean isValid = !activities.isEmpty();
@@ -64,13 +67,8 @@ public class AnnotationParse {
         if (null != action) {
             mAction = action.value();
         }
+        /* Uri: Scheme + Host + Port + Path*/
 
-        /*RouteUri: Scheme + Host + Port + Path*/
-//        RouteUri routeUri = method.getAnnotation(RouteUri.class);
-//        if (null != routeUri) {
-//            url += routeUri.routeUri();
-//            return;
-//        }
         /*拼接协议参数*/
         Scheme scheme = method.getAnnotation(Scheme.class);
         if (null != scheme) {
@@ -104,34 +102,35 @@ public class AnnotationParse {
      *
      * @param method
      */
-    public void parseParamsAnnotation(Method method, Object[] args) {
-        HashMap<String, String> params = new HashMap<>();
-        /**/
+    private void parseParamsAnnotation(Method method, Object[] args) {
         Annotation[][] annotations = method.getParameterAnnotations();
         StringBuilder reqParamsBuilder = new StringBuilder();
         for (int i = 0; i < annotations.length; i++) {
             Annotation[] annotationsArrays = annotations[i];
-            if (annotationsArrays.length > 0) {
-                Annotation annotationsItem = annotationsArrays[0];
-//                if (!(annotationsItem instanceof RouterParam))
-//                    break;
-//                if (i == 0) {
-//                    reqParamsBuilder.append("?");
-//                } else {
-//                    reqParamsBuilder.append("&");
-//                }
-//                /*添加Key*/
-//                reqParamsBuilder.append(((RouterParam) annotationsItem).getDataModel());
-//                reqParamsBuilder.append("=");
-//                /*添加Value*/
-//                reqParamsBuilder.append(args[i]);
+            for (int j = 0; j < annotationsArrays.length; j++) {
+                Annotation annotationsItem = annotationsArrays[j];
                 if (annotationsItem instanceof RouterParam) {
-                    params = ((JumpDataModel) args[0]).getData();
+                    if (args[i] instanceof JumpDataModel) {
+                        paramsModel = ((JumpDataModel) args[i]);
+                    } else if (args[i] instanceof String) {
+                        if (i == 0) {
+                            reqParamsBuilder.append("?");
+                        } else {
+                            reqParamsBuilder.append("&");
+                        }
+                        /*添加Key*/
+                        reqParamsBuilder.append(((RouterParam) annotationsItem).value());
+                        reqParamsBuilder.append("=");
+                        /*添加Value*/
+                        reqParamsBuilder.append(args[i]);
+                    }
                 }
             }
+
         }
-        Log.e("params", params.toString());
-//        url += reqParamsBuilder.toString();
+
+        url += reqParamsBuilder.toString();
+        Log.e("uri===", url);
 
     }
 

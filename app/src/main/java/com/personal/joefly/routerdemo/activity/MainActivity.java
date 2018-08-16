@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.personal.joefly.routerdemo.routertable.ISecondPageRouter;
+import com.personal.joefly.routerdemo.routertable.IPageRouterTable;
 import com.personal.joefly.routerdemo.R;
 import com.personal.joefly.routerdemo.model.JumpDataModel;
 import com.personal.joefly.routerdemo.router.RouterBuilder;
@@ -20,14 +20,14 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_skip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> param = new HashMap<>();
-                param.put("name", "joker");
-                param.put("age", "18");
-                JumpDataModel.getInstance().setData(param);
-
+                HashMap<String, String> params = new HashMap<>();
+                params.put(SecondActivity.paramKey1, "joker");
+                params.put(SecondActivity.paramKey2, "18");
+                JumpDataModel jumpDataModel = JumpDataModel.getInstance();
+                jumpDataModel.setData(params);
                 RouterBuilder.getInstance(MainActivity.this)
-                        .create(ISecondPageRouter.class)
-                        .skip(JumpDataModel.getInstance());
+                        .create(IPageRouterTable.class)
+                        .skipSecondActivity(jumpDataModel);
             }
         });
 
