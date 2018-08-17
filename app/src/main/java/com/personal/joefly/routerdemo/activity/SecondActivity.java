@@ -3,7 +3,6 @@ package com.personal.joefly.routerdemo.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.personal.joefly.routerdemo.R;
@@ -14,23 +13,20 @@ import com.personal.joefly.routerdemo.routertable.IPageRouterTable;
 import java.util.HashMap;
 
 public class SecondActivity extends AppCompatActivity {
-    public static String userName = "name";
-    public static String userAge = "age";
-    private String paramValue1;
-    private String paramValue2;
-    private Button btn_goto_third_page;
+    //页面跳转时传递的参数KEY值
+    public static String userName = "user_name";
+    public static String userAge = "user_age";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-        initView();
+        setListener();
         initData();
     }
 
-    private void initView() {
-        btn_goto_third_page = findViewById(R.id.btn_goto_third_page);
-        btn_goto_third_page.setOnClickListener(new View.OnClickListener() {
+    private void setListener() {
+        findViewById(R.id.btn_goto_third_page).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RouterBuilder.getInstance(SecondActivity.this)
@@ -44,10 +40,10 @@ public class SecondActivity extends AppCompatActivity {
         JumpDataModel jumpDataModel = (JumpDataModel) getIntent().getSerializableExtra(JumpDataModel.KEY);
         if (jumpDataModel != null) {
             HashMap<String, String> data = jumpDataModel.getData();
-            paramValue1 = data.get(userName);
-            paramValue2 = data.get(userAge);
+            String name = data.get(userName);
+            String age = data.get(userAge);
             Toast.makeText(this,
-                    "Map方式获取参数:" + userName + " = " + paramValue1 + "," + userAge + " = " + paramValue2,
+                    "Map方式获取参数:" + userName + " = " + name + "," + userAge + " = " + age,
                     Toast.LENGTH_SHORT).show();
         }
     }
