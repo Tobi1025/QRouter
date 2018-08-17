@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RouterDemo.iml" filepath="$PROJECT_DIR$/RouterDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qrouter/qrouter.iml" filepath="$PROJECT_DIR$/qrouter/qrouter.iml" />
     </modules>
   </component>
 </project>
