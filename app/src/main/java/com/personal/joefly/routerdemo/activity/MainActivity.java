@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 HashMap<String, String> params = new HashMap<>();
-                params.put(SecondActivity.paramKey1, "joker");
-                params.put(SecondActivity.paramKey2, "18");
+                params.put(SecondActivity.userName, "joker");
+                params.put(SecondActivity.userAge, "18");
                 JumpDataModel jumpDataModel = JumpDataModel.getInstance();
                 jumpDataModel.setData(params);
                 RouterBuilder.getInstance(MainActivity.this)

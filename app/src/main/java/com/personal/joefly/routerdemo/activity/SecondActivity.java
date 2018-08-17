@@ -11,12 +11,11 @@ import com.personal.joefly.routerdemo.model.JumpDataModel;
 import com.personal.joefly.routerdemo.router.RouterBuilder;
 import com.personal.joefly.routerdemo.routertable.IPageRouterTable;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 public class SecondActivity extends AppCompatActivity {
-    public static String paramKey1 = "name";
-    public static String paramKey2 = "age";
+    public static String userName = "name";
+    public static String userAge = "age";
     private String paramValue1;
     private String paramValue2;
     private Button btn_goto_third_page;
@@ -45,10 +44,10 @@ public class SecondActivity extends AppCompatActivity {
         JumpDataModel jumpDataModel = (JumpDataModel) getIntent().getSerializableExtra(JumpDataModel.KEY);
         if (jumpDataModel != null) {
             HashMap<String, String> data = jumpDataModel.getData();
-            paramValue1 = data.get(paramKey1);
-            paramValue2 = data.get(paramKey2);
+            paramValue1 = data.get(userName);
+            paramValue2 = data.get(userAge);
             Toast.makeText(this,
-                    "Map方式获取参数:" + paramKey1 + " = " + paramValue1 + "," + paramKey2 + " = " + paramValue2,
+                    "Map方式获取参数:" + userName + " = " + paramValue1 + "," + userAge + " = " + paramValue2,
                     Toast.LENGTH_SHORT).show();
         }
     }
