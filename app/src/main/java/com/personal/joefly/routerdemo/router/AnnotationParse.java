@@ -113,6 +113,7 @@ public class AnnotationParse {
                     if (args[i] instanceof JumpDataModel) {
                         paramsModel = ((JumpDataModel) args[i]);
                     } else if (args[i] instanceof String) {
+                        paramsModel = null;
                         if (i == 0) {
                             reqParamsBuilder.append("?");
                         } else {
