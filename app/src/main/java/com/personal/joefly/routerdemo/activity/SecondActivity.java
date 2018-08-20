@@ -31,7 +31,7 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View view) {
                 RouterBuilder.getInstance(SecondActivity.this)
                         .create(IPageRouterTable.class)
-                        .skipThirdActvity("luffy", "18");
+                        .skipThirdActivity("luffy", "18");
             }
         });
     }

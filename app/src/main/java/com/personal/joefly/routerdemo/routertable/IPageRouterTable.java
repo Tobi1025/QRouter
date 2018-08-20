@@ -36,5 +36,5 @@ public interface IPageRouterTable {
     @Scheme("content")
     @Host("jump")
     @Path("/jumpThirdActivity")
-    void skipThirdActvity(@RouterParam("userName") String name, @RouterParam("userAge") String age);
+    void skipThirdActivity(@RouterParam("userName") String name, @RouterParam("userAge") String age);
 }
