@@ -23,7 +23,7 @@
         android:id="@+id/btn_common_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="显示路由跳转" />
+        android:text="显示路由跳转-Map传参" />
 
 
 </LinearLayout>
