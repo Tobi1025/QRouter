@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import com.personal.joefly.model.JumpDataModel;
 
 import java.lang.annotation.Annotation;
@@ -19,10 +18,13 @@ import java.util.List;
  */
 
 public class AnnotationParse {
+    private static final String TAG = AnnotationParse.class.getSimpleName();
     private String url = "";
     private JumpDataModel paramsModel;
     private String mAction = Intent.ACTION_VIEW;
     private RouterBuilder builder;
+    private String targetActivityName;
+    private String routerPath;
 
     public AnnotationParse(RouterBuilder builder) {
         this.builder = builder;
@@ -41,18 +43,36 @@ public class AnnotationParse {
      * @return
      */
     public boolean toRoute() {
-        PackageManager packageManager = builder.applicationContext.getPackageManager();
-        Intent intent = new Intent(mAction, Uri.parse(url));
-        if (paramsModel != null) {
-            intent.putExtra(JumpDataModel.KEY, paramsModel);
+        if (TextUtils.isEmpty(targetActivityName)) {
+            //隐示路由跳转
+            PackageManager packageManager = builder.context.getPackageManager();
+            Intent intent = new Intent(mAction, Uri.parse(url));
+            if (paramsModel != null) {
+                intent.putExtra(JumpDataModel.KEY, paramsModel);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+            boolean isValid = !activities.isEmpty();
+            if (isValid) {
+                builder.context.startActivity(intent);
+            }
+            return isValid;
+        } else {
+            //显示路由跳转
+            Class<?> clazz = null;
+            try {
+                clazz = Class.forName(targetActivityName);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            Intent intent = new Intent(builder.context, clazz);
+            if (paramsModel != null) {
+                intent.putExtra(JumpDataModel.KEY, paramsModel);
+            }
+            builder.context.startActivity(intent);
+            return true;
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
-        boolean isValid = !activities.isEmpty();
-        if (isValid) {
-            builder.applicationContext.startActivity(intent);
-        }
-        return isValid;
+
     }
 
 
@@ -93,7 +113,8 @@ public class AnnotationParse {
         Path path = method.getAnnotation(Path.class);
         if (null != path) {
             String value = path.value();
-            url += (TextUtils.isEmpty(value) ? builder.getPath() : value);
+            routerPath = TextUtils.isEmpty(value) ? builder.getPath() : value;
+            url += routerPath;
         }
     }
 
@@ -113,6 +134,7 @@ public class AnnotationParse {
                     if (args[i] instanceof JumpDataModel) {
                         paramsModel = ((JumpDataModel) args[i]);
                     } else if (args[i] instanceof String) {
+                        paramsModel = null;
                         if (i == 0) {
                             reqParamsBuilder.append("?");
                         } else {
@@ -124,6 +146,9 @@ public class AnnotationParse {
                         /*添加Value*/
                         reqParamsBuilder.append(args[i]);
                     }
+                } else if (annotationsItem instanceof Path) {
+                    targetActivityName = (String) args[i];
+                    Log.e(TAG, "targetActivityName = " + targetActivityName);
                 }
             }
 

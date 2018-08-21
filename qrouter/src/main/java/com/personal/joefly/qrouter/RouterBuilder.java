@@ -1,6 +1,8 @@
 package com.personal.joefly.qrouter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -13,13 +15,15 @@ import java.util.Map;
  */
 
 public class RouterBuilder {
+    private static final String TAG = RouterBuilder.class.getSimpleName();
     private static RouterBuilder builder;
     private Map<Method, AnnotationParse> serviceMethodCache = new HashMap<>();
-    Context applicationContext;
+    Context context;
     private String scheme;
     private String host;
     private String port;
     private String path;
+    private String activityName;
 
     /**
      * 实例化对应的接口类对象
@@ -38,12 +42,17 @@ public class RouterBuilder {
                 if (method.getDeclaringClass() == Object.class) {
                     return method.invoke(this, args);
                 }
-
+                if (context instanceof Activity) {
+                    activityName = ((Activity) context).getComponentName().getClassName();
+                    Log.e(TAG, "ActivityName = " + activityName);
+                }
                 AnnotationParse annotationParse = loadServiceMethod(method, args);
                 return annotationParse.toRoute();
             }
         });
     }
+
+
 
     /**
      * 检查注解是否完成了解析
@@ -79,7 +88,7 @@ public class RouterBuilder {
     }
 
     public RouterBuilder(Context context) {
-        this.applicationContext = context.getApplicationContext();
+        this.context = context;
     }
 
     public static RouterBuilder getInstance(Context context) {
