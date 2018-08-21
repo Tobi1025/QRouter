@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.personal.joefly.routerdemo.activity.MainActivity">
 
     <Button
-        android:id="@+id/btn_skip"
+        android:id="@+id/btn_map_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="前往下一页"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="隐示路由跳转-Map传参" />
+
+    <Button
+        android:id="@+id/btn_uri_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="隐示路由跳转-Uri拼接传参" />
+
+    <Button
+        android:id="@+id/btn_common_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="显示路由跳转" />
 
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

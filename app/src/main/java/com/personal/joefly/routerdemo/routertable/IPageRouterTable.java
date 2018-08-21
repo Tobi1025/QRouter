@@ -17,7 +17,8 @@ import com.personal.joefly.routerdemo.router.Scheme;
 
 public interface IPageRouterTable {
     /**
-     * 通过序列化对象，进行参数传递
+     * 隐示路由跳转，通过Map进行参数传递
+     *
      * @param model 内部封装了Map
      */
     @Action(Intent.ACTION_DEFAULT)
@@ -28,7 +29,9 @@ public interface IPageRouterTable {
     void skipSecondActivity(@RouterParam JumpDataModel model);
 
     /**
-     *通过key - value 进行参数传递
+     * 隐示路由跳转
+     * 通过key - value  Uri拼接进行参数传递
+     *
      * @param name key:userName value name
      * @param age  key:userAge  value age
      */
@@ -37,4 +40,13 @@ public interface IPageRouterTable {
     @Host("jump")
     @Path("/jumpThirdActivity")
     void skipThirdActivity(@RouterParam("userName") String name, @RouterParam("userAge") String age);
+
+    /**
+     * 显示路由跳转
+     *
+     * @param path  目标页面全类名
+     * @param model 内部封装了Map
+     */
+    void navigation(@Path("targetClassName") String path, @RouterParam JumpDataModel model);
+
 }

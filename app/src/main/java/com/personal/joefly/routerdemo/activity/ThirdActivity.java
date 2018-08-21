@@ -22,7 +22,7 @@ public class ThirdActivity extends AppCompatActivity {
             String name = uri.getQueryParameter("userName");
             String age = uri.getQueryParameter("userAge");
             Toast.makeText(this,
-                    "uri拼接方式获取参数:"+"name = " + name + ",age = " + age,
+                    "uri拼接方式获取参数:" + "name = " + name + ",age = " + age,
                     Toast.LENGTH_LONG).show();
         }
 

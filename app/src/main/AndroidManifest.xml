@@ -3,7 +3,7 @@
     package="com.personal.joefly.routerdemo">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -41,6 +41,7 @@
                     android:scheme="content" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.CommonRouterActivity"></activity>
     </application>
 
 </manifest>

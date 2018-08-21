@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ThirdActivity">
+    tools:context=".activity.CommonRouterActivity">
 
     <TextView
+        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="隐示路由跳转页面,Uri拼接方式传参" />
-
+        android:text="显示路由跳转页面" />
 </RelativeLayout>
