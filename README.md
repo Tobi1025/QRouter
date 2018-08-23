@@ -10,5 +10,6 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     * `URI拼接方式`，需要在本地路由表方法参数注解里注明所需要传递的参数的键名key
 
 ## 注意
-隐示路由跳转优先从路由表相应的配置的方法注解里获取Action、Scheme、Host、Port、Path的值，
+* 隐示路由跳转优先从路由表相应的配置的方法注解里获取Action、Scheme、Host、Port、Path的值，
 如果没获取到，再从RouterBuilder里获取(builder里的值是通过代码设置的，如:builder.Scheme(..)、builder.host(..)等)。
+* 显示路由跳转的navigation()方法参数中的path必须是目标类的全名类,如TargetClass.class.getName()。
