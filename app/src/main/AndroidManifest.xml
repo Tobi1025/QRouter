@@ -25,7 +25,6 @@
                 <data
                     android:host="jump"
                     android:path="/jumpSecondActivity"
-                    android:port="8080"
                     android:scheme="content" />
             </intent-filter>
         </activity>
@@ -41,7 +40,7 @@
                     android:scheme="content" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CommonRouterActivity"></activity>
+        <activity android:name=".activity.CommonRouterActivity" />
     </application>
 
 </manifest>

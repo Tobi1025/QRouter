@@ -4,13 +4,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.personal.joefly.interfaces.Path;
 import com.personal.joefly.routerdemo.R;
 import com.personal.joefly.routerdemo.model.JumpDataModel;
 import com.personal.joefly.routerdemo.router.RouterBuilder;
 import com.personal.joefly.routerdemo.routertable.IPageRouterTable;
 
 import java.util.HashMap;
-
+@Path(path = "/main")
 public class MainActivity extends AppCompatActivity {
 
     @Override

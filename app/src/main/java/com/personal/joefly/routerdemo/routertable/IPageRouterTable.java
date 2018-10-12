@@ -6,7 +6,6 @@ import com.personal.joefly.routerdemo.model.JumpDataModel;
 import com.personal.joefly.routerdemo.router.Action;
 import com.personal.joefly.routerdemo.router.Host;
 import com.personal.joefly.routerdemo.router.Path;
-import com.personal.joefly.routerdemo.router.Port;
 import com.personal.joefly.routerdemo.router.RouterParam;
 import com.personal.joefly.routerdemo.router.Scheme;
 
@@ -24,7 +23,6 @@ public interface IPageRouterTable {
     @Action(Intent.ACTION_DEFAULT)
     @Scheme("content")
     @Host("jump")
-    @Port("8080")
     @Path("/jumpSecondActivity")
     void skipSecondActivity(@RouterParam JumpDataModel model);
 
