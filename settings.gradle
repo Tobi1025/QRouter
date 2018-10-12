@@ -1,1 +1,1 @@
-include ':app', ':qrouter', ':compile', ':interfaces'
+include ':app', ':qrouter', ':compiler', ':interfaces'

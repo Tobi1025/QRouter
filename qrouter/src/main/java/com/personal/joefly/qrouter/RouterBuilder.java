@@ -53,7 +53,6 @@ public class RouterBuilder {
     }
 
 
-
     /**
      * 检查注解是否完成了解析
      *
@@ -134,4 +133,7 @@ public class RouterBuilder {
         return path;
     }
 
+    public static void route(String path, Class<? extends Activity> activity) {
+
+    }
 }
