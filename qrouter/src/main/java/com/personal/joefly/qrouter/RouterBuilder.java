@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.personal.joefly.model.RouteActivityModel;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -18,6 +20,7 @@ public class RouterBuilder {
     private static final String TAG = RouterBuilder.class.getSimpleName();
     private static RouterBuilder builder;
     private Map<Method, AnnotationParse> serviceMethodCache = new HashMap<>();
+    private static HashMap<String, Class<? extends Activity>> classMap = new HashMap<>();
     Context context;
     private String scheme;
     private String host;
@@ -134,6 +137,7 @@ public class RouterBuilder {
     }
 
     public static void route(String path, Class<? extends Activity> activity) {
-
+        classMap.put(path, activity);
+        RouteActivityModel.getInstance().setRouteActivityClassMap(classMap);
     }
 }

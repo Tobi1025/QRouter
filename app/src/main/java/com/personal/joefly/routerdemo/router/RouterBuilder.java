@@ -23,7 +23,6 @@ public class RouterBuilder {
     private String host;
     private String port;
     private String path;
-    private String activityName;
 
     /**
      * 实例化对应的接口类对象
@@ -41,10 +40,6 @@ public class RouterBuilder {
                 /*如果调用的是Object类中的方法,则直接调用*/
                 if (method.getDeclaringClass() == Object.class) {
                     return method.invoke(this, args);
-                }
-                if (context instanceof Activity) {
-                    activityName = ((Activity) context).getComponentName().getClassName();
-                    Log.e(TAG, "ActivityName = " + activityName);
                 }
                 AnnotationParse annotationParse = loadServiceMethod(method, args);
                 return annotationParse.toRoute();

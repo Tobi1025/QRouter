@@ -1,16 +1,20 @@
 package com.personal.joefly.qrouter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.personal.joefly.model.JumpDataModel;
+import com.personal.joefly.model.RouteActivityModel;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,7 +27,7 @@ public class AnnotationParse {
     private JumpDataModel paramsModel;
     private String mAction = Intent.ACTION_VIEW;
     private RouterBuilder builder;
-    private String targetActivityName;
+    private String targetActivityRoutePath;
     private String routerPath;
 
     public AnnotationParse(RouterBuilder builder) {
@@ -43,7 +47,7 @@ public class AnnotationParse {
      * @return
      */
     public boolean toRoute() {
-        if (TextUtils.isEmpty(targetActivityName)) {
+        if (TextUtils.isEmpty(targetActivityRoutePath)) {
             //隐示路由跳转
             PackageManager packageManager = builder.context.getPackageManager();
             Intent intent = new Intent(mAction, Uri.parse(url));
@@ -59,17 +63,18 @@ public class AnnotationParse {
             return isValid;
         } else {
             //显示路由跳转
-            Class<?> clazz = null;
-            try {
-                clazz = Class.forName(targetActivityName);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            Class<?> clazz;
+            HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
+            if (activityClassMap.containsKey(targetActivityRoutePath)) {
+                clazz = activityClassMap.get(targetActivityRoutePath);
+                Intent intent = new Intent(builder.context, clazz);
+                if (paramsModel != null) {
+                    intent.putExtra(JumpDataModel.KEY, paramsModel);
+                }
+                builder.context.startActivity(intent);
+            } else {
+                Toast.makeText(builder.context, "path配置错误", Toast.LENGTH_LONG).show();
             }
-            Intent intent = new Intent(builder.context, clazz);
-            if (paramsModel != null) {
-                intent.putExtra(JumpDataModel.KEY, paramsModel);
-            }
-            builder.context.startActivity(intent);
             return true;
         }
 
@@ -147,8 +152,8 @@ public class AnnotationParse {
                         reqParamsBuilder.append(args[i]);
                     }
                 } else if (annotationsItem instanceof Path) {
-                    targetActivityName = (String) args[i];
-                    Log.e(TAG, "targetActivityName = " + targetActivityName);
+                    targetActivityRoutePath = (String) args[i];
+                    Log.e(TAG, "targetActivityRoutePath = " + targetActivityRoutePath);
                 }
             }
 

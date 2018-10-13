@@ -2,7 +2,7 @@ package com.personal.joefly.routerdemo.routertable;
 
 import android.content.Intent;
 
-import com.personal.joefly.routerdemo.model.JumpDataModel;
+import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.routerdemo.router.Action;
 import com.personal.joefly.routerdemo.router.Host;
 import com.personal.joefly.routerdemo.router.Path;
@@ -42,9 +42,9 @@ public interface IPageRouterTable {
     /**
      * 显示路由跳转
      *
-     * @param path  目标页面全类名
+     * @param path  目标页面路由path
      * @param model 内部封装了Map
      */
-    void navigation(@Path("targetClassName") String path, @RouterParam JumpDataModel model);
+    void navigation( @Path String path, @RouterParam JumpDataModel model);
 
 }

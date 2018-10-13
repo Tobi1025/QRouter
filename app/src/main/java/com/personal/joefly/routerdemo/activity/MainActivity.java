@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.personal.joefly.interfaces.Path;
+import com.personal.joefly.model.JumpDataModel;
+import com.personal.joefly.qrouter.RouterBuilder;
 import com.personal.joefly.routerdemo.R;
-import com.personal.joefly.routerdemo.model.JumpDataModel;
-import com.personal.joefly.routerdemo.router.RouterBuilder;
 import com.personal.joefly.routerdemo.routertable.IPageRouterTable;
 
 import java.util.HashMap;
@@ -56,10 +56,9 @@ public class MainActivity extends AppCompatActivity {
                 params.put(CommonRouterActivity.userAge, "22");
                 JumpDataModel jumpDataModel = JumpDataModel.getInstance();
                 jumpDataModel.setData(params);
-
                 RouterBuilder.getInstance(MainActivity.this)
                         .create(IPageRouterTable.class)
-                        .navigation(CommonRouterActivity.class.getName(), jumpDataModel);
+                        .navigation("/commonRouterActivity", jumpDataModel);
             }
         });
     }

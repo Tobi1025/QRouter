@@ -4,11 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.personal.joefly.interfaces.Path;
 import com.personal.joefly.routerdemo.R;
 import com.personal.joefly.routerdemo.model.JumpDataModel;
 
 import java.util.HashMap;
 
+@Path(path = "/commonRouterActivity")
 public class CommonRouterActivity extends AppCompatActivity {
     //页面跳转时传递的参数KEY值
     public static String userName = "user_name";
