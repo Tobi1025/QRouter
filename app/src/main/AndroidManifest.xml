@@ -3,6 +3,7 @@
     package="com.personal.joefly.routerdemo">
 
     <application
+        android:name=".activity.DemoApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

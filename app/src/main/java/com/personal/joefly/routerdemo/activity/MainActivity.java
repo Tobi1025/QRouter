@@ -8,9 +8,9 @@ import com.personal.joefly.interfaces.RouterUri;
 import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.qrouter.RouterBuilder;
 import com.personal.joefly.routerdemo.R;
-import com.personal.joefly.routerdemo.routertable.IPageRouterTable;
 
 import java.util.HashMap;
+
 @RouterUri(path = "/main")
 public class MainActivity extends AppCompatActivity {
 
@@ -30,20 +30,8 @@ public class MainActivity extends AppCompatActivity {
                 params.put(SecondActivity.userAge, "18");
                 JumpDataModel jumpDataModel = JumpDataModel.getInstance();
                 jumpDataModel.setData(params);
+                RouterBuilder.startWebUri(MainActivity.this, "/jumpSecondActivity", jumpDataModel);
 
-                RouterBuilder.getInstance(MainActivity.this)
-                        .create(IPageRouterTable.class)
-                        .skipSecondActivity(jumpDataModel);
-
-            }
-        });
-
-        findViewById(R.id.btn_uri_skip).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RouterBuilder.getInstance(MainActivity.this)
-                        .create(IPageRouterTable.class)
-                        .skipThirdActivity("luffy", "18");
             }
         });
 
@@ -56,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 params.put(CommonRouterActivity.userAge, "22");
                 JumpDataModel jumpDataModel = JumpDataModel.getInstance();
                 jumpDataModel.setData(params);
-                RouterBuilder.getInstance(MainActivity.this)
-                        .create(IPageRouterTable.class)
-                        .navigation("/commonRouterActivity", jumpDataModel);
+                RouterBuilder.startOriginUri(MainActivity.this, "/commonRouterActivity", jumpDataModel);
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.personal.joefly.qrouter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 
 public class AnnotationParse {
+    private Context context;
     private static final String TAG = AnnotationParse.class.getSimpleName();
     private String url = "";
     private JumpDataModel paramsModel;
@@ -35,7 +37,8 @@ public class AnnotationParse {
         this.builder = builder;
     }
 
-    public void parseAnnotation(Method method, Object[] args) {
+    public void parseAnnotation(Context context, Method method, Object[] args) {
+        this.context = context;
         /*解析方法注解*/
         parseMethodAnnotation(method);
         /*解析方法参数注解*/
@@ -50,7 +53,7 @@ public class AnnotationParse {
     public boolean toRoute() {
         if (TextUtils.isEmpty(targetActivityRoutePath)) {
             //隐示路由跳转
-            PackageManager packageManager = builder.context.getPackageManager();
+            PackageManager packageManager = context.getPackageManager();
             Intent intent = new Intent(mAction, Uri.parse(url));
             if (paramsModel != null) {
                 intent.putExtra(JumpDataModel.KEY, paramsModel);
@@ -59,7 +62,7 @@ public class AnnotationParse {
             List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
             boolean isValid = !activities.isEmpty();
             if (isValid) {
-                builder.context.startActivity(intent);
+                context.startActivity(intent);
             }
             return isValid;
         } else {
@@ -80,13 +83,13 @@ public class AnnotationParse {
             HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
             if (activityClassMap.containsKey(targetActivityRoutePath)) {
                 clazz = activityClassMap.get(targetActivityRoutePath);
-                Intent intent = new Intent(builder.context, clazz);
+                Intent intent = new Intent(context, clazz);
                 if (paramsModel != null) {
                     intent.putExtra(JumpDataModel.KEY, paramsModel);
                 }
-                builder.context.startActivity(intent);
+                context.startActivity(intent);
             } else {
-                Toast.makeText(builder.context, "path配置错误", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "path配置错误", Toast.LENGTH_LONG).show();
             }
             return true;
         }

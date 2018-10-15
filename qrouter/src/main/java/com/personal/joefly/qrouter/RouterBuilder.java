@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.model.RouteActivityModel;
 
 import java.lang.reflect.InvocationHandler;
@@ -16,88 +17,28 @@ import java.util.Map;
  * Created by qiaojingfei on 2018/8/1.
  */
 
-public class RouterBuilder {
+public class RouterBuilder extends UriHandler {
+    private static UriHandler uriHandler;
     private static final String TAG = RouterBuilder.class.getSimpleName();
     private static RouterBuilder builder;
     private Map<Method, AnnotationParse> serviceMethodCache = new HashMap<>();
     private static HashMap<String, Class<? extends Activity>> classMap = new HashMap<>();
-    Context context;
     private String scheme;
     private String host;
     private String port;
     private String path;
-    private String activityName;
 
-    /**
-     * 实例化对应的接口类对象
-     *
-     * @param clazz
-     * @param <T>
-     * @return
-     */
-    public <T> T create(Class<T> clazz) {
-        validateServiceInterface(clazz);
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-                /*如果调用的是Object类中的方法,则直接调用*/
-                if (method.getDeclaringClass() == Object.class) {
-                    return method.invoke(this, args);
-                }
-                if (context instanceof Activity) {
-                    activityName = ((Activity) context).getComponentName().getClassName();
-                    Log.e(TAG, "ActivityName = " + activityName);
-                }
-                AnnotationParse annotationParse = loadServiceMethod(method, args);
-                return annotationParse.toRoute();
-            }
-        });
+    public RouterBuilder() {
+        super(builder);
     }
 
-
-    /**
-     * 检查注解是否完成了解析
-     *
-     * @param method
-     * @param args
-     * @return
-     */
-    AnnotationParse loadServiceMethod(Method method, Object[] args) {
-        AnnotationParse serviceMethod = serviceMethodCache.get(method);
-        if (null != serviceMethod)
-            return serviceMethod;
-        synchronized (serviceMethodCache) {
-            serviceMethod = new AnnotationParse(this);
-            serviceMethodCache.put(method, serviceMethod);
+    public static void init() {
+        if (builder == null) {
+            builder = new RouterBuilder();
         }
-        serviceMethod.parseAnnotation(method, args);
-        return serviceMethod;
-    }
-
-    /**
-     * 校验接口是否合法
-     *
-     * @param clazz 接口类的字节码
-     * @param <T>
-     */
-    <T> void validateServiceInterface(Class<T> clazz) {
-        if (!clazz.isInterface())
-            throw new IllegalArgumentException("clazz must be a interface.");
-
-        if (clazz.getInterfaces().length > 0)
-            throw new IllegalArgumentException("clazz must be not extent other interface.");
-    }
-
-    public RouterBuilder(Context context) {
-        this.context = context;
-    }
-
-    public static RouterBuilder getInstance(Context context) {
-        if (builder != null) {
-            return builder;
+        if (uriHandler == null) {
+            uriHandler = new UriHandler(builder);
         }
-        return new RouterBuilder(context);
     }
 
     public RouterBuilder scheme(String scheme) {
@@ -139,5 +80,39 @@ public class RouterBuilder {
     public static void saveRouterClass(String path, Class<? extends Activity> activity) {
         classMap.put(path, activity);
         RouteActivityModel.getInstance().setRouteActivityClassMap(classMap);
+    }
+
+    public static void startOriginUri(final Context context, String path, JumpDataModel jumpDataModel) {
+        //实例化对应的接口类对象
+        IPageRouterTable routerTable = (IPageRouterTable) Proxy.newProxyInstance(IPageRouterTable.class.getClassLoader(), new Class[]{IPageRouterTable.class}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+                /*如果调用的是Object类中的方法,则直接调用*/
+                if (method.getDeclaringClass() == Object.class) {
+                    return method.invoke(this, args);
+                }
+                AnnotationParse annotationParse = uriHandler.loadServiceMethod(context, method, args);
+                return annotationParse.toRoute();
+            }
+        });
+        routerTable.originSkip(path, jumpDataModel);
+    }
+
+    public static void startWebUri(final Context context, String path, JumpDataModel jumpDataModel) {
+        //实例化对应的接口类对象
+        IPageRouterTable routerTable = (IPageRouterTable) Proxy.newProxyInstance(IPageRouterTable.class.getClassLoader(), new Class[]{IPageRouterTable.class}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+                /*如果调用的是Object类中的方法,则直接调用*/
+                if (method.getDeclaringClass() == Object.class) {
+                    return method.invoke(this, args);
+                }
+                AnnotationParse annotationParse = uriHandler.loadServiceMethod(context, method, args);
+                return annotationParse.toRoute();
+            }
+        });
+        routerTable.webSkip(path, jumpDataModel);
     }
 }
