@@ -5,11 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.personal.joefly.interfaces.RouterUri;
-import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.qrouter.RouterBuilder;
 import com.personal.joefly.routerdemo.R;
-
-import java.util.HashMap;
 
 @RouterUri(path = "/main")
 public class MainActivity extends AppCompatActivity {
@@ -25,12 +22,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_map_skip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(SecondActivity.userName, "joker");
-                params.put(SecondActivity.userAge, "18");
-                JumpDataModel jumpDataModel = JumpDataModel.getInstance();
-                jumpDataModel.setData(params);
-                RouterBuilder.startWebUri(MainActivity.this, "/jumpSecondActivity", jumpDataModel);
+                RouterBuilder.getBuilder()
+                        .putStringExtra(SecondActivity.userName, "web")
+                        .putStringExtra(SecondActivity.userAge, "18")
+                        .startWebUri(MainActivity.this, "/jumpSecondActivity");
 
             }
         });
@@ -39,12 +34,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_common_skip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> params = new HashMap<>();
-                params.put(CommonRouterActivity.userName, "solo");
-                params.put(CommonRouterActivity.userAge, "22");
-                JumpDataModel jumpDataModel = JumpDataModel.getInstance();
-                jumpDataModel.setData(params);
-                RouterBuilder.startOriginUri(MainActivity.this, "/commonRouterActivity", jumpDataModel);
+                RouterBuilder.getBuilder()
+                        .putStringExtra(CommonRouterActivity.userName, "origin")
+                        .putStringExtra(CommonRouterActivity.userAge, "22")
+                        .startOriginUri(MainActivity.this, "/commonRouterActivity");
             }
         });
     }

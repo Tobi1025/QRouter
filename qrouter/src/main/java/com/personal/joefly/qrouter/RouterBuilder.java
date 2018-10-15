@@ -2,7 +2,7 @@ package com.personal.joefly.qrouter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
+import android.text.TextUtils;
 
 import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.model.RouteActivityModel;
@@ -11,34 +11,40 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by qiaojingfei on 2018/8/1.
  */
 
 public class RouterBuilder extends UriHandler {
+    private static RouterBuilder builder;
     private static UriHandler uriHandler;
     private static final String TAG = RouterBuilder.class.getSimpleName();
-    private static RouterBuilder builder;
-    private Map<Method, AnnotationParse> serviceMethodCache = new HashMap<>();
     private static HashMap<String, Class<? extends Activity>> classMap = new HashMap<>();
     private String scheme;
     private String host;
     private String port;
     private String path;
+    private static HashMap<String, String> params ;
+    private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
 
-    public RouterBuilder() {
-        super(builder);
-    }
-
-    public static void init() {
+    public static void init(String defaultScheme, String defaultHost) {
         if (builder == null) {
             builder = new RouterBuilder();
+            String scheme = TextUtils.isEmpty(defaultScheme) ? "" : defaultScheme;
+            String host = TextUtils.isEmpty(defaultHost) ? "" : defaultHost;
+            builder.scheme(scheme);
+            builder.host(host);
         }
         if (uriHandler == null) {
-            uriHandler = new UriHandler(builder);
+            uriHandler = new UriHandler();
+            uriHandler.setBuilder(builder);
         }
+    }
+
+    public static RouterBuilder getBuilder() {
+        params = new HashMap<>();
+        return builder;
     }
 
     public RouterBuilder scheme(String scheme) {
@@ -82,7 +88,7 @@ public class RouterBuilder extends UriHandler {
         RouteActivityModel.getInstance().setRouteActivityClassMap(classMap);
     }
 
-    public static void startOriginUri(final Context context, String path, JumpDataModel jumpDataModel) {
+    public void startOriginUri(final Context context, String path) {
         //实例化对应的接口类对象
         IPageRouterTable routerTable = (IPageRouterTable) Proxy.newProxyInstance(IPageRouterTable.class.getClassLoader(), new Class[]{IPageRouterTable.class}, new InvocationHandler() {
             @Override
@@ -99,7 +105,7 @@ public class RouterBuilder extends UriHandler {
         routerTable.originSkip(path, jumpDataModel);
     }
 
-    public static void startWebUri(final Context context, String path, JumpDataModel jumpDataModel) {
+    public void startWebUri(final Context context, String path) {
         //实例化对应的接口类对象
         IPageRouterTable routerTable = (IPageRouterTable) Proxy.newProxyInstance(IPageRouterTable.class.getClassLoader(), new Class[]{IPageRouterTable.class}, new InvocationHandler() {
             @Override
@@ -115,4 +121,15 @@ public class RouterBuilder extends UriHandler {
         });
         routerTable.webSkip(path, jumpDataModel);
     }
+
+    public RouterBuilder putStringExtra(String key, String value) {
+        params.put(key, value);
+        jumpDataModel.setData(params);
+        return builder;
+    }
+
+    public RouterBuilder putObjectExtra(String key, Object obj) {
+        return builder;
+    }
+
 }

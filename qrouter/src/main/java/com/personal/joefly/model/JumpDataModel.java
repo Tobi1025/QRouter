@@ -10,12 +10,18 @@ import java.util.HashMap;
 
 public class JumpDataModel implements Serializable {
     public static String KEY = JumpDataModel.class.getSimpleName();
+    private HashMap<String, String> data = new HashMap<>();
 
-    public static JumpDataModel getInstance() {
-        return new JumpDataModel();
+    private JumpDataModel() {
     }
 
-    private HashMap<String, String> data = new HashMap<>();
+    public static JumpDataModel getInstance() {
+        return InnerFactory.jumpDataModel;
+    }
+
+    private static class InnerFactory {
+        private static JumpDataModel jumpDataModel = new JumpDataModel();
+    }
 
     public void setData(HashMap<String, String> data) {
         this.data = data;
