@@ -136,7 +136,7 @@ public class RouterBuilder {
         return path;
     }
 
-    public static void route(String path, Class<? extends Activity> activity) {
+    public static void saveRouterClass(String path, Class<? extends Activity> activity) {
         classMap.put(path, activity);
         RouteActivityModel.getInstance().setRouteActivityClassMap(classMap);
     }

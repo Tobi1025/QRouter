@@ -13,6 +13,7 @@ import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.model.RouteActivityModel;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,19 @@ public class AnnotationParse {
             return isValid;
         } else {
             //显示路由跳转
+            try {
+                Class<?> jumpMappingClass = Class.forName("com.personal.joefly.qrouter.JumpMapping");
+                jumpMappingClass.getMethod("routebuild").invoke(null);
+                Log.e("jumpMappingClass = ", jumpMappingClass + "");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
             Class<?> clazz;
             HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
             if (activityClassMap.containsKey(targetActivityRoutePath)) {

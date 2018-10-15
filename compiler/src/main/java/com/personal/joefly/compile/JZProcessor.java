@@ -1,7 +1,7 @@
 package com.personal.joefly.compile;
 
 import com.google.auto.service.AutoService;
-import com.personal.joefly.interfaces.Path;
+import com.personal.joefly.interfaces.RouterUri;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
@@ -35,23 +35,23 @@ public class JZProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         CodeBlock.Builder builder = CodeBlock.builder();
-        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Path.class);
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(RouterUri.class);
         for (Element element : elements) {
-            String path = element.getAnnotation(Path.class).path();
-            builder.addStatement("com.personal.joefly.qrouter.RouterBuilder.route($S,$T.class)", path, ClassName.get((TypeElement) element));
+            String path = element.getAnnotation(RouterUri.class).path();
+            builder.addStatement("com.personal.joefly.qrouter.RouterBuilder.saveRouterClass($S,$T.class)", path, ClassName.get((TypeElement) element));
         }
-        MethodSpec methodSpec = MethodSpec.methodBuilder("routebuild")
-                .addModifiers(Modifier.PUBLIC)
+        MethodSpec methodSpec = MethodSpec.methodBuilder("routerInit")
+                .addModifiers(Modifier.PUBLIC,Modifier.STATIC)
                 .returns(TypeName.VOID)
                 .addCode(builder.build())
                 .build();
 
-        TypeSpec hello = TypeSpec.classBuilder("JumpMapping")
+        TypeSpec uriAnnotationInit = TypeSpec.classBuilder("UriAnnotationInit")
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(methodSpec)
                 .build();
         try {
-            JavaFile.builder("com.personal.joefly.qrouter", hello)
+            JavaFile.builder("com.personal.joefly.qrouter", uriAnnotationInit)
                     .build()
                     .writeTo(filer);
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class JZProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<>(Collections.singletonList(Path.class.getName()));
+        return new HashSet<>(Collections.singletonList(RouterUri.class.getName()));
     }
 
 

@@ -1,16 +1,16 @@
 package com.personal.joefly.routerdemo.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.personal.joefly.interfaces.Path;
+import com.personal.joefly.interfaces.RouterUri;
+import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.routerdemo.R;
-import com.personal.joefly.routerdemo.model.JumpDataModel;
 
 import java.util.HashMap;
 
-@Path(path = "/commonRouterActivity")
+@RouterUri(path = "/commonRouterActivity")
 public class CommonRouterActivity extends AppCompatActivity {
     //页面跳转时传递的参数KEY值
     public static String userName = "user_name";

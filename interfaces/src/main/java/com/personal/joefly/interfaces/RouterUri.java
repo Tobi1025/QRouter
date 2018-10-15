@@ -8,8 +8,9 @@ import java.lang.annotation.Target;
 /**
  * Created by qiaojingfei on 2018/8/1.
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Action {
-    String value() default "";
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.CLASS)
+public @interface RouterUri {
+    String path() default "";
 }

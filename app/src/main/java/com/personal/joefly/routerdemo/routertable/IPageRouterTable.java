@@ -3,11 +3,11 @@ package com.personal.joefly.routerdemo.routertable;
 import android.content.Intent;
 
 import com.personal.joefly.model.JumpDataModel;
-import com.personal.joefly.routerdemo.router.Action;
-import com.personal.joefly.routerdemo.router.Host;
-import com.personal.joefly.routerdemo.router.Path;
-import com.personal.joefly.routerdemo.router.RouterParam;
-import com.personal.joefly.routerdemo.router.Scheme;
+import com.personal.joefly.qrouter.Action;
+import com.personal.joefly.qrouter.Host;
+import com.personal.joefly.qrouter.Path;
+import com.personal.joefly.qrouter.RouterParam;
+import com.personal.joefly.qrouter.Scheme;
 
 /**
  * 路由表

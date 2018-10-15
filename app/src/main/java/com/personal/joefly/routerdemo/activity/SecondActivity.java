@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.personal.joefly.model.JumpDataModel;
 import com.personal.joefly.routerdemo.R;
-import com.personal.joefly.routerdemo.model.JumpDataModel;
 
 import java.util.HashMap;
 

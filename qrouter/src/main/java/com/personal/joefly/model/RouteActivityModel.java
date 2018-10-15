@@ -11,11 +11,22 @@ import java.util.HashMap;
  */
 
 public class RouteActivityModel implements Serializable {
-    public static String KEY = RouteActivityModel.class.getSimpleName();
+    private static RouteActivityModel routeActivityModel;
     private HashMap<String, Class<? extends Activity>> routeActivityClassMap = new HashMap<>();
 
+    private RouteActivityModel() {
+    }
+
     public static RouteActivityModel getInstance() {
-        return new RouteActivityModel();
+        if (routeActivityModel == null) {
+            synchronized (RouteActivityModel.class) {
+                if (routeActivityModel == null) {
+                    routeActivityModel = new RouteActivityModel();
+                }
+            }
+        }
+
+        return routeActivityModel;
     }
 
     public HashMap<String, Class<? extends Activity>> getRouteActivityClassMap() {
