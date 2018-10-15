@@ -65,9 +65,8 @@ public class AnnotationParse {
         } else {
             //显示路由跳转
             try {
-                Class<?> jumpMappingClass = Class.forName("com.personal.joefly.qrouter.JumpMapping");
-                jumpMappingClass.getMethod("routebuild").invoke(null);
-                Log.e("jumpMappingClass = ", jumpMappingClass + "");
+                Class<?> jumpMappingClass = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
+                jumpMappingClass.getMethod("routerInit").invoke(null);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
