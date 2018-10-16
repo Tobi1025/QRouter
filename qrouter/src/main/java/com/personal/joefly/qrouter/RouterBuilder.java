@@ -29,7 +29,10 @@ public class RouterBuilder extends UriHandler {
     private String host;
     private String port;
     private String path;
-    private static HashMap<String, String> params ;
+    private static HashMap<String, String> stringMap;
+    private static HashMap<String, Integer> intMap;
+    private static HashMap<String, Boolean> booleanMap;
+    private static HashMap<String, Object> objMap;
     private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
 
     public static void register(String defaultScheme, String defaultHost) {
@@ -59,7 +62,10 @@ public class RouterBuilder extends UriHandler {
     }
 
     public static RouterBuilder getBuilder() {
-        params = new HashMap<>();
+        stringMap = new HashMap<>();
+        intMap = new HashMap<>();
+        booleanMap = new HashMap<>();
+        objMap = new HashMap<>();
         return builder;
     }
 
@@ -139,13 +145,30 @@ public class RouterBuilder extends UriHandler {
     }
 
     public RouterBuilder putStringExtra(String key, String value) {
-        params.put(key, value);
-        jumpDataModel.setData(params);
+        stringMap.put(key, value);
+        jumpDataModel.setStringMap(stringMap);
         return builder;
     }
 
-    public RouterBuilder putObjectExtra(String key, Object obj) {
+    public RouterBuilder putIntExtra(String key, int value) {
+        intMap.put(key, value);
+        jumpDataModel.setIntMap(intMap);
         return builder;
     }
+
+    public RouterBuilder putBooleanExtra(String key, boolean value) {
+        booleanMap.put(key, value);
+        jumpDataModel.setBooleanMap(booleanMap);
+        return builder;
+    }
+
+    public RouterBuilder putObjectExtra(String key, Object value) {
+        objMap.put(key, value);
+        jumpDataModel.setObjectMap(objMap);
+        return builder;
+    }
+
+
+
 
 }

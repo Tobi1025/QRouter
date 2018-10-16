@@ -2,7 +2,7 @@ package com.personal.joefly.routerdemo.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.personal.joefly.interfaces.RouterUri;
 import com.personal.joefly.qrouter.model.JumpDataModel;
@@ -24,14 +24,21 @@ public class CommonRouterActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        JumpDataModel jumpDataModel = (JumpDataModel) getIntent().getSerializableExtra(JumpDataModel.KEY);
+        JumpDataModel jumpDataModel = JumpDataModel.getInstance();
         if (jumpDataModel != null) {
-            HashMap<String, String> data = jumpDataModel.getData();
-            String name = data.get(userName);
-            String age = data.get(userAge);
-            Toast.makeText(this,
-                    "Map方式获取参数:" + userName + " = " + name + "," + userAge + " = " + age,
-                    Toast.LENGTH_SHORT).show();
+            String name = jumpDataModel.getStringExtra(userName);
+            String age = jumpDataModel.getStringExtra(userAge);
+            int intValue1 = jumpDataModel.getIntExtra("intKey1", -1);
+            int intValue2 = jumpDataModel.getIntExtra("intKey2", -1);
+            boolean bValue1 = jumpDataModel.getBooleanExtra("booleanKey1", false);
+            boolean bValue2 = jumpDataModel.getBooleanExtra("booleanKey2", false);
+            HashMap map1 = jumpDataModel.getObjectExtra("objKey1", HashMap.class);
+            HashMap map2 = jumpDataModel.getObjectExtra("objKey2", HashMap.class);
+            Log.e("JumpData==",
+                    "str1 = " + name + ",str2 = " + age
+                            + ",int1 = " + intValue1 + ",int2 = " + intValue2
+                            + ",b1 = " + bValue1 + ",b2 = " + bValue2
+                            + ",map1 = " + map1.toString() + ",map2 = " + map2.toString());
         }
     }
 }
