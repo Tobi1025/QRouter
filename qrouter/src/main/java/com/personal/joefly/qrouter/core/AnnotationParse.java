@@ -21,7 +21,6 @@ import com.personal.joefly.qrouter.uri.Port;
 import com.personal.joefly.qrouter.uri.Scheme;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -57,18 +56,6 @@ public class AnnotationParse {
      * @return
      */
     public boolean toOriginRoute() {
-        try {
-            Class<?> jumpMappingClass = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
-            jumpMappingClass.getMethod("routerInit").invoke(null);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
         Class<?> clazz;
         HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
         if (activityClassMap.containsKey(targetActivityRoutePath)) {

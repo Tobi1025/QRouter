@@ -11,6 +11,7 @@ import com.personal.joefly.qrouter.model.JumpDataModel;
 import com.personal.joefly.qrouter.model.RouteActivityModel;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class RouterBuilder extends UriHandler {
     private static HashMap<String, String> params ;
     private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
 
-    public static void init(String defaultScheme, String defaultHost) {
+    public static void register(String defaultScheme, String defaultHost) {
         if (builder == null) {
             builder = new RouterBuilder();
             String scheme = TextUtils.isEmpty(defaultScheme) ? "" : defaultScheme;
@@ -42,6 +43,18 @@ public class RouterBuilder extends UriHandler {
         if (uriHandler == null) {
             uriHandler = new UriHandler();
             uriHandler.setBuilder(builder);
+        }
+        try {
+            Class<?> uriAnnotationInit = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
+            uriAnnotationInit.getMethod("routerInit").invoke(null);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 

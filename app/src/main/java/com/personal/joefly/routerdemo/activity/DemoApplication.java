@@ -8,6 +8,6 @@ public class DemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        RouterBuilder.init(Cons.scheme,Cons.host);
+        RouterBuilder.register(Cons.scheme,Cons.host);
     }
 }
