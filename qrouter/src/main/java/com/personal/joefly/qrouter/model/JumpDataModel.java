@@ -1,4 +1,4 @@
-package com.personal.joefly.model;
+package com.personal.joefly.qrouter.model;
 
 import java.io.Serializable;
 import java.util.HashMap;

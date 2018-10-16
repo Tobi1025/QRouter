@@ -1,8 +1,12 @@
-package com.personal.joefly.qrouter;
+package com.personal.joefly.qrouter.api;
 
 import android.content.Intent;
 
-import com.personal.joefly.model.JumpDataModel;
+import com.personal.joefly.qrouter.model.JumpDataModel;
+import com.personal.joefly.qrouter.uri.Action;
+import com.personal.joefly.qrouter.uri.Host;
+import com.personal.joefly.qrouter.uri.Path;
+import com.personal.joefly.qrouter.uri.Scheme;
 
 /**
  * 路由表

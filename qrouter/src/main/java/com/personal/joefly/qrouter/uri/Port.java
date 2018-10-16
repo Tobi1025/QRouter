@@ -1,4 +1,4 @@
-package com.personal.joefly.qrouter;
+package com.personal.joefly.qrouter.uri;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Action {
+public @interface Port {
     String value() default "";
 }

@@ -1,4 +1,4 @@
-package com.personal.joefly.qrouter;
+package com.personal.joefly.qrouter.uri;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.personal.joefly.qrouter;
+package com.personal.joefly.qrouter.core;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,8 +10,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.personal.joefly.model.JumpDataModel;
-import com.personal.joefly.model.RouteActivityModel;
+import com.personal.joefly.qrouter.RouterBuilder;
+import com.personal.joefly.qrouter.api.RouterParam;
+import com.personal.joefly.qrouter.model.JumpDataModel;
+import com.personal.joefly.qrouter.model.RouteActivityModel;
+import com.personal.joefly.qrouter.uri.Action;
+import com.personal.joefly.qrouter.uri.Host;
+import com.personal.joefly.qrouter.uri.Path;
+import com.personal.joefly.qrouter.uri.Port;
+import com.personal.joefly.qrouter.uri.Scheme;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

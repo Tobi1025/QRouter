@@ -1,7 +1,7 @@
-package com.personal.joefly.qrouter;
+package com.personal.joefly.qrouter.api;
 
 
-import com.personal.joefly.model.JumpDataModel;
+import com.personal.joefly.qrouter.model.JumpDataModel;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

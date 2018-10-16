@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.personal.joefly.interfaces.RouterUri;
-import com.personal.joefly.model.JumpDataModel;
+import com.personal.joefly.qrouter.model.JumpDataModel;
 import com.personal.joefly.routerdemo.R;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.personal.joefly.qrouter;
+package com.personal.joefly.qrouter.uri;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,8 +8,9 @@ import java.lang.annotation.Target;
 /**
  * Created by qiaojingfei on 2018/8/1.
  */
-@Target(ElementType.METHOD)
+
+@Target({ElementType.METHOD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Host {
+public @interface Path {
     String value() default "";
 }
