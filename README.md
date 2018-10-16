@@ -40,3 +40,15 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
 
     }
     ```
+* 获取参数
+    ``` java
+    JumpDataModel jumpDataModel = JumpDataModel.getInstance();
+    //获取String类型参数
+    jumpDataModel.getStringExtra("key")
+    //获取int类型参数
+    jumpDataModel.getIntExtra("key")
+    //获取boolean类型参数
+    jumpDataModel.getBooleanExtra("key")
+    //获取指定任意类型参数
+    jumpDataModel.getObjectExtra("key", HashMap.class)
+    ```
