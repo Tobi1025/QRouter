@@ -15,7 +15,7 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
 * 隐示跳转(Web跳转)的path必须是以"/"开头，显示跳转(原生跳转)无要求
 ## 使用方式
 * 显示(原生跳转)
-    * ``` java
+    ``` java
     RouterBuilder.getBuilder()
             .putStringExtra(SecondActivity.userName, "origin")
             .putStringExtra(SecondActivity.userAge, "22")
@@ -28,7 +28,7 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
      }
      ```
 * 隐示(Web跳转)
-    * ``` java
+    ``` java
     RouterBuilder.getBuilder()
             .putStringExtra(SecondActivity.userName, "web")
             .putStringExtra(SecondActivity.userAge, "18")
