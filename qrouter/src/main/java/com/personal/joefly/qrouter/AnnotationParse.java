@@ -46,54 +46,56 @@ public class AnnotationParse {
     }
 
     /**
-     * 执行路由跳转
+     * 执行显示路由跳转
      *
      * @return
      */
-    public boolean toRoute() {
-        if (TextUtils.isEmpty(targetActivityRoutePath)) {
-            //隐示路由跳转
-            PackageManager packageManager = context.getPackageManager();
-            Intent intent = new Intent(mAction, Uri.parse(url));
+    public boolean toOriginRoute() {
+        try {
+            Class<?> jumpMappingClass = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
+            jumpMappingClass.getMethod("routerInit").invoke(null);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Class<?> clazz;
+        HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
+        if (activityClassMap.containsKey(targetActivityRoutePath)) {
+            clazz = activityClassMap.get(targetActivityRoutePath);
+            Intent intent = new Intent(context, clazz);
             if (paramsModel != null) {
                 intent.putExtra(JumpDataModel.KEY, paramsModel);
             }
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
-            boolean isValid = !activities.isEmpty();
-            if (isValid) {
-                context.startActivity(intent);
-            }
-            return isValid;
+            context.startActivity(intent);
         } else {
-            //显示路由跳转
-            try {
-                Class<?> jumpMappingClass = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
-                jumpMappingClass.getMethod("routerInit").invoke(null);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            Class<?> clazz;
-            HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
-            if (activityClassMap.containsKey(targetActivityRoutePath)) {
-                clazz = activityClassMap.get(targetActivityRoutePath);
-                Intent intent = new Intent(context, clazz);
-                if (paramsModel != null) {
-                    intent.putExtra(JumpDataModel.KEY, paramsModel);
-                }
-                context.startActivity(intent);
-            } else {
-                Toast.makeText(context, "path配置错误", Toast.LENGTH_LONG).show();
-            }
-            return true;
+            Toast.makeText(context, "path配置错误", Toast.LENGTH_LONG).show();
         }
+        return true;
+    }
 
+    /**
+     * 执行隐示路由跳转
+     *
+     * @return
+     */
+    public boolean toWebRoute() {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = new Intent(mAction, Uri.parse(url));
+        if (paramsModel != null) {
+            intent.putExtra(JumpDataModel.KEY, paramsModel);
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+        boolean isValid = !activities.isEmpty();
+        if (isValid) {
+            context.startActivity(intent);
+        }
+        return isValid;
     }
 
 
@@ -131,12 +133,13 @@ public class AnnotationParse {
             url += (TextUtils.isEmpty(value) ? builder.getPort() : value);
         }
         /*拼接路径参数*/
-        Path path = method.getAnnotation(Path.class);
-        if (null != path) {
-            String value = path.value();
-            routerPath = TextUtils.isEmpty(value) ? builder.getPath() : value;
-            url += routerPath;
-        }
+//        Path path = method.getAnnotation(Path.class);
+//        if (null != path) {
+//            String value = path.value();
+//            routerPath = TextUtils.isEmpty(value) ? builder.getPath() : value;
+//            url += routerPath;
+//        }
+
     }
 
     /**
@@ -174,7 +177,9 @@ public class AnnotationParse {
             }
 
         }
-
+        if (!TextUtils.isEmpty(targetActivityRoutePath)) {
+            url += targetActivityRoutePath;
+        }
         url += reqParamsBuilder.toString();
         Log.e("uri===", url);
 

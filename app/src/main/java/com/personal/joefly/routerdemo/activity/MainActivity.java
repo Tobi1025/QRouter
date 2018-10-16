@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.personal.joefly.interfaces.RouterUri;
 import com.personal.joefly.qrouter.RouterBuilder;
 import com.personal.joefly.routerdemo.R;
 
-@RouterUri(path = "/main")
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 RouterBuilder.getBuilder()
                         .putStringExtra(CommonRouterActivity.userName, "origin")
                         .putStringExtra(CommonRouterActivity.userAge, "22")
-                        .startOriginUri(MainActivity.this, "/commonRouterActivity");
+                        .startOriginUri(MainActivity.this, "commonRouterActivity");
             }
         });
     }

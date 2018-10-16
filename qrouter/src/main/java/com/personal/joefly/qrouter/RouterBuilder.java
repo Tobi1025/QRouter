@@ -99,7 +99,7 @@ public class RouterBuilder extends UriHandler {
                     return method.invoke(this, args);
                 }
                 AnnotationParse annotationParse = uriHandler.loadServiceMethod(context, method, args);
-                return annotationParse.toRoute();
+                return annotationParse.toOriginRoute();
             }
         });
         routerTable.originSkip(path, jumpDataModel);
@@ -116,7 +116,7 @@ public class RouterBuilder extends UriHandler {
                     return method.invoke(this, args);
                 }
                 AnnotationParse annotationParse = uriHandler.loadServiceMethod(context, method, args);
-                return annotationParse.toRoute();
+                return annotationParse.toWebRoute();
             }
         });
         routerTable.webSkip(path, jumpDataModel);
