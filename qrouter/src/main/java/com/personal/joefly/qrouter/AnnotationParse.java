@@ -31,7 +31,6 @@ public class AnnotationParse {
     private String mAction = Intent.ACTION_VIEW;
     private RouterBuilder builder;
     private String targetActivityRoutePath;
-    private String routerPath;
 
     public AnnotationParse(RouterBuilder builder) {
         this.builder = builder;
