@@ -20,9 +20,8 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
             .putStringExtra(SecondActivity.userName, "origin")
             .putStringExtra(SecondActivity.userAge, "22")
             .startOriginUri(MainActivity.this, "commonRouterActivity");
-      ```
-     对应的Activity
-     ``` java
+
+     //对应的Activity
      @RouterUri(path = "commonRouterActivity")
      public class CommonRouterActivity extends AppCompatActivity{
 
@@ -34,9 +33,8 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
             .putStringExtra(SecondActivity.userName, "web")
             .putStringExtra(SecondActivity.userAge, "18")
             .startWebUri(MainActivity.this, "/jumpSecondActivity");
-      ```
-      对应的Activity
-    ``` java
+
+    //对应的Activity
     @RouterUri(path = "/jumpSecondActivity")
     public class SecondActivity extends AppCompatActivity{
 
