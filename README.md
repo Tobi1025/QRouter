@@ -14,6 +14,10 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
 * 可以在Application中通过RouterBuilder.init()函数设置默认的Scheme、Host。
 * 隐示跳转(Web跳转)的path必须是以"/"开头，显示跳转(原生跳转)无要求
 ## 使用方式
+* Application中完成注册,指定默认的Scheme与host
+    ``` java
+    RouterBuilder.register(Cons.scheme,Cons.host);
+    ```
 * 显示(原生跳转)
     ``` java
     RouterBuilder.getBuilder()
