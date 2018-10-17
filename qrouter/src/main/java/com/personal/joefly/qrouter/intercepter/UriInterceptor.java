@@ -4,10 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
- * 拦截URI跳转并做处理，支持异步操作。
- *
- * Created by jzj on 2017/4/11.
- */
+ * description: 拦截URI跳转并做处理
+ * author: qiaojingfei
+ * date: 2018/10/17 下午6:28
+*/
 public interface UriInterceptor {
 
     /**

@@ -1,9 +1,10 @@
 package com.personal.joefly.qrouter.intercepter;
 
 /**
- * 异步事件处理完成的回调
- * Created by jzj on 2017/4/11.
- */
+ * description: 拦截器拦截完成后的回调
+ * author: qiaojingfei
+ * date: 2018/10/17 下午6:27
+*/
 public interface UriCallback  {
 
     /**

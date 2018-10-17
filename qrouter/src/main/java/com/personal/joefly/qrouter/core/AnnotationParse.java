@@ -94,18 +94,32 @@ public class AnnotationParse {
      * @return
      */
     public boolean toWebRoute() {
-        PackageManager packageManager = context.getPackageManager();
-        Intent intent = new Intent(mAction, Uri.parse(url));
+        HashMap<String, InterceptorQueue> routeActivityInterceptorMap = RouteActivityModel.getInstance().getRouteActivityInterceptorMap();
+        if (routeActivityInterceptorMap.containsKey(targetActivityRoutePath)) {
+            routeActivityInterceptorMap.get(targetActivityRoutePath).intercept(context, new UriCallback() {
+                @Override
+                public void onNext() {
+                    Log.e("Interceptor", targetActivityRoutePath + " 所有Interceptor已执行完成");
+                    PackageManager packageManager = context.getPackageManager();
+                    Intent intent = new Intent(mAction, Uri.parse(url));
 //        if (paramsModel != null) {
 //            intent.putExtra(JumpDataModel.KEY, paramsModel);
 //        }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
-        boolean isValid = !activities.isEmpty();
-        if (isValid) {
-            context.startActivity(intent);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+                    boolean isValid = !activities.isEmpty();
+                    if (isValid) {
+                        context.startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.e("Interceptor", targetActivityRoutePath + " Activity的Interceptor已手动结束");
+                }
+            });
         }
-        return isValid;
+        return true;
     }
 
 
