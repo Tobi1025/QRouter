@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import com.personal.joefly.qrouter.api.IPageRouterTable;
 import com.personal.joefly.qrouter.core.AnnotationParse;
 import com.personal.joefly.qrouter.core.UriHandler;
+import com.personal.joefly.qrouter.intercepter.InterceptorQueue;
+import com.personal.joefly.qrouter.intercepter.UriInterceptor;
 import com.personal.joefly.qrouter.model.JumpDataModel;
 import com.personal.joefly.qrouter.model.RouteActivityModel;
 
@@ -25,6 +27,7 @@ public class RouterBuilder extends UriHandler {
     private static UriHandler uriHandler;
     private static final String TAG = RouterBuilder.class.getSimpleName();
     private static HashMap<String, Class<? extends Activity>> classMap = new HashMap<>();
+    private static HashMap<String, InterceptorQueue> interceptorMap = new HashMap<>();
     private String scheme;
     private String host;
     private String port;
@@ -105,9 +108,15 @@ public class RouterBuilder extends UriHandler {
         return path;
     }
 
-    public static void saveRouterClass(String path, Class<? extends Activity> activity) {
+    public static void saveRouterClass(String path, Class<? extends Activity> activity, UriInterceptor... interceptors) {
         classMap.put(path, activity);
+        InterceptorQueue interceptorQueue = new InterceptorQueue();
+        for (UriInterceptor interceptor : interceptors) {
+            interceptorQueue.addInterceptor(interceptor);
+        }
+        interceptorMap.put(path, interceptorQueue);
         RouteActivityModel.getInstance().setRouteActivityClassMap(classMap);
+        RouteActivityModel.getInstance().setRouteActivityInterceptorMap(interceptorMap);
     }
 
     public void startOriginUri(final Context context, String path) {
@@ -167,8 +176,6 @@ public class RouterBuilder extends UriHandler {
         jumpDataModel.setObjectMap(objMap);
         return builder;
     }
-
-
 
 
 }

@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.personal.joefly.qrouter.RouterBuilder;
 import com.personal.joefly.qrouter.api.RouterParam;
+import com.personal.joefly.qrouter.intercepter.InterceptorQueue;
+import com.personal.joefly.qrouter.intercepter.UriCallback;
 import com.personal.joefly.qrouter.model.JumpDataModel;
 import com.personal.joefly.qrouter.model.RouteActivityModel;
 import com.personal.joefly.qrouter.uri.Action;
@@ -56,17 +58,32 @@ public class AnnotationParse {
      * @return
      */
     public boolean toOriginRoute() {
-        Class<?> clazz;
-        HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
-        if (activityClassMap.containsKey(targetActivityRoutePath)) {
-            clazz = activityClassMap.get(targetActivityRoutePath);
-            Intent intent = new Intent(context, clazz);
+        HashMap<String, InterceptorQueue> routeActivityInterceptorMap = RouteActivityModel.getInstance().getRouteActivityInterceptorMap();
+        final HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
+        if (routeActivityInterceptorMap.containsKey(targetActivityRoutePath)) {
+            routeActivityInterceptorMap.get(targetActivityRoutePath).intercept(context, new UriCallback() {
+                @Override
+                public void onNext() {
+                    Log.e("Interceptor", targetActivityRoutePath + " 所有Interceptor已执行完成");
+                    if (activityClassMap.containsKey(targetActivityRoutePath)) {
+                        Class<?> clazz = activityClassMap.get(targetActivityRoutePath);
+                        Intent intent = new Intent(context, clazz);
 //            if (paramsModel != null) {
 //                intent.putExtra(JumpDataModel.KEY, paramsModel);
 //            }
-            context.startActivity(intent);
+                        context.startActivity(intent);
+                    } else {
+                        Toast.makeText(context, "没有找到对应的path", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.e("Interceptor", targetActivityRoutePath + " Activity的Interceptor已手动结束");
+                }
+            });
         } else {
-            Toast.makeText(context, "path配置错误", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "没有找到对应的path", Toast.LENGTH_LONG).show();
         }
         return true;
     }

@@ -13,4 +13,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface RouterUri {
     String path() default "";
+    /**
+     * 要添加的interceptors
+     */
+    Class[] interceptors() default {};
 }
