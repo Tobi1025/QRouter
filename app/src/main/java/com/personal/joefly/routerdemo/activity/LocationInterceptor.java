@@ -6,16 +6,17 @@ import android.util.Log;
 
 import com.personal.joefly.qrouter.intercepter.UriCallback;
 import com.personal.joefly.qrouter.intercepter.UriInterceptor;
+
 /**
- * description: 登录拦截器
+ * description: 定位拦截器
  * author: qiaojingfei
  * date: 2018/10/17 下午6:27
-*/
-public class LoginInterceptor implements UriInterceptor {
+ */
+public class LocationInterceptor implements UriInterceptor {
     @Override
     public void intercept(@NonNull Context context, @NonNull UriCallback callback) {
-        //TODO 可进行跳转前的一些逻辑判断,如判断登录状态
-        Log.e("Interceptor","登录拦截器执行");
+        //TODO 可进行跳转前的一些逻辑判断,如获取位置信息
+        Log.e("Interceptor", "定位拦截器执行");
         callback.onNext();
     }
 }

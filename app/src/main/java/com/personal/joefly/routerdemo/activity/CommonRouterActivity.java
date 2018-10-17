@@ -10,7 +10,7 @@ import com.personal.joefly.routerdemo.R;
 
 import java.util.HashMap;
 
-@RouterUri(path = "commonRouterActivity", interceptors = LoginInterceptor.class)
+@RouterUri(path = "commonRouterActivity", interceptors = {LoginInterceptor.class,LocationInterceptor.class})
 public class CommonRouterActivity extends AppCompatActivity {
     //页面跳转时传递的参数KEY值
     public static String userName = "user_name";

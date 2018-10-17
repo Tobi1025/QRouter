@@ -2,7 +2,6 @@ package com.personal.joefly.qrouter.intercepter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,7 +36,6 @@ public class InterceptorQueue implements UriInterceptor {
             t.intercept(context, new UriCallback() {
                 @Override
                 public void onNext() {
-                    Log.e("Interceptor","Interceptor执行");
                     next(iterator, context, callback);
                 }
 
