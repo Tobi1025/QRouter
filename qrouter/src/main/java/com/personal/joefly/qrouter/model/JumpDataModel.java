@@ -1,7 +1,7 @@
 package com.personal.joefly.qrouter.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
  * 页面跳转时将参数存入map进行传递
@@ -10,10 +10,10 @@ import java.util.HashMap;
 
 public class JumpDataModel implements Serializable {
 //    public static String KEY = JumpDataModel.class.getSimpleName();
-    private HashMap<String, String> stringMap = new HashMap<>();
-    private HashMap<String, Integer> intMap = new HashMap<>();
-    private HashMap<String, Boolean> booleanMap = new HashMap<>();
-    private HashMap<String, Object> objectMap = new HashMap<>();
+    private WeakHashMap<String, String> stringMap = new WeakHashMap<>();
+    private WeakHashMap<String, Integer> intMap = new WeakHashMap<>();
+    private WeakHashMap<String, Boolean> booleanMap = new WeakHashMap<>();
+    private WeakHashMap<String, Object> objectMap = new WeakHashMap<>();
 
     private JumpDataModel() {
     }
@@ -26,7 +26,7 @@ public class JumpDataModel implements Serializable {
         return InnerFactory.jumpDataModel;
     }
 
-    public void setStringMap(HashMap<String, String> stringMap) {
+    public void setStringMap(WeakHashMap<String, String> stringMap) {
         this.stringMap = stringMap;
     }
 
@@ -34,7 +34,7 @@ public class JumpDataModel implements Serializable {
         return stringMap.containsKey(key) ? stringMap.get(key) : "";
     }
 
-    public void setIntMap(HashMap<String, Integer> intMap) {
+    public void setIntMap(WeakHashMap<String, Integer> intMap) {
         this.intMap = intMap;
     }
 
@@ -46,7 +46,7 @@ public class JumpDataModel implements Serializable {
         return booleanMap.containsKey(key) ? booleanMap.get(key) : defaultValue;
     }
 
-    public void setBooleanMap(HashMap<String, Boolean> booleanMap) {
+    public void setBooleanMap(WeakHashMap<String, Boolean> booleanMap) {
         this.booleanMap = booleanMap;
     }
 
@@ -58,7 +58,7 @@ public class JumpDataModel implements Serializable {
         return retObject;
     }
 
-    public void setObjectMap(HashMap<String, Object> objectMap) {
+    public void setObjectMap(WeakHashMap<String, Object> objectMap) {
         this.objectMap = objectMap;
     }
 

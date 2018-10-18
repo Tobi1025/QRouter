@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 
 /**
  * Created by qiaojingfei on 2018/8/1.
@@ -32,10 +33,10 @@ public class RouterBuilder extends UriHandler {
     private String host;
     private String port;
     private String path;
-    private static HashMap<String, String> stringMap;
-    private static HashMap<String, Integer> intMap;
-    private static HashMap<String, Boolean> booleanMap;
-    private static HashMap<String, Object> objMap;
+    private static WeakHashMap<String, String> stringMap;
+    private static WeakHashMap<String, Integer> intMap;
+    private static WeakHashMap<String, Boolean> booleanMap;
+    private static WeakHashMap<String, Object> objMap;
     private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
 
     public static void register(String defaultScheme, String defaultHost) {
@@ -65,10 +66,10 @@ public class RouterBuilder extends UriHandler {
     }
 
     public static RouterBuilder getBuilder() {
-        stringMap = new HashMap<>();
-        intMap = new HashMap<>();
-        booleanMap = new HashMap<>();
-        objMap = new HashMap<>();
+        stringMap = new WeakHashMap<>();
+        intMap = new WeakHashMap<>();
+        booleanMap = new WeakHashMap<>();
+        objMap = new WeakHashMap<>();
         return builder;
     }
 
