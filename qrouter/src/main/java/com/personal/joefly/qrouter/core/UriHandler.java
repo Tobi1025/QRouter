@@ -10,21 +10,17 @@ import java.util.Map;
 
 public class UriHandler {
     private Map<Method, AnnotationParse> serviceMethodCache = new HashMap<>();
-    private RouterBuilder builder;
-
-    public void setBuilder(RouterBuilder builder) {
-        this.builder = builder;
-    }
 
     /**
-     * 检查注解是否完成了解析
+     * 解析注解
      *
+     * @param builder
      * @param context
      * @param method
      * @param args
      * @return
      */
-    public AnnotationParse loadServiceMethod(Context context, Method method, Object[] args) {
+    public AnnotationParse loadServiceMethod(RouterBuilder builder, Context context, Method method, Object[] args) {
         AnnotationParse serviceMethod = serviceMethodCache.get(method);
         if (null != serviceMethod)
             return serviceMethod;

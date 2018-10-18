@@ -24,8 +24,7 @@ import java.util.WeakHashMap;
  */
 
 public class RouterBuilder extends UriHandler {
-    private static RouterBuilder builder;
-    private static UriHandler uriHandler;
+    private static RouterBuilder builder = RouterBuilderFactory.routerBuilder;
     private static final String TAG = RouterBuilder.class.getSimpleName();
     private static HashMap<String, Class<? extends Activity>> classMap = new HashMap<>();
     private static HashMap<String, InterceptorQueue> interceptorMap = new HashMap<>();
@@ -39,18 +38,18 @@ public class RouterBuilder extends UriHandler {
     private static WeakHashMap<String, Object> objMap;
     private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
 
+    private RouterBuilder() {
+    }
+
+    private static class RouterBuilderFactory {
+        private static RouterBuilder routerBuilder = new RouterBuilder();
+    }
+
     public static void register(String defaultScheme, String defaultHost) {
-        if (builder == null) {
-            builder = new RouterBuilder();
-            String scheme = TextUtils.isEmpty(defaultScheme) ? "" : defaultScheme;
-            String host = TextUtils.isEmpty(defaultHost) ? "" : defaultHost;
-            builder.scheme(scheme);
-            builder.host(host);
-        }
-        if (uriHandler == null) {
-            uriHandler = new UriHandler();
-            uriHandler.setBuilder(builder);
-        }
+        String scheme = TextUtils.isEmpty(defaultScheme) ? "" : defaultScheme;
+        String host = TextUtils.isEmpty(defaultHost) ? "" : defaultHost;
+        builder.scheme(scheme);
+        builder.host(host);
         try {
             Class<?> uriAnnotationInit = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
             uriAnnotationInit.getMethod("routerInit").invoke(null);
@@ -130,7 +129,7 @@ public class RouterBuilder extends UriHandler {
                 if (method.getDeclaringClass() == Object.class) {
                     return method.invoke(this, args);
                 }
-                AnnotationParse annotationParse = uriHandler.loadServiceMethod(context, method, args);
+                AnnotationParse annotationParse = loadServiceMethod(RouterBuilder.this, context, method, args);
                 return annotationParse.toOriginRoute();
             }
         });
@@ -147,7 +146,7 @@ public class RouterBuilder extends UriHandler {
                 if (method.getDeclaringClass() == Object.class) {
                     return method.invoke(this, args);
                 }
-                AnnotationParse annotationParse = uriHandler.loadServiceMethod(context, method, args);
+                AnnotationParse annotationParse = loadServiceMethod(RouterBuilder.this, context, method, args);
                 return annotationParse.toWebRoute();
             }
         });
