@@ -22,13 +22,31 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
 * 显示(原生跳转)
     ``` java
     RouterBuilder.getBuilder()
-            .putStringExtra(SecondActivity.userName, "origin")
-            .putStringExtra(SecondActivity.userAge, "22")
-            .startOriginUri(MainActivity.this, "commonRouterActivity");
+                            .putStringExtra(CommonRouterActivity.userName, "str-origin")
+                            .putStringExtra(CommonRouterActivity.userAge, "str-22")
+                            .putIntExtra("intKey1", 1)
+                            .putIntExtra("intKey2", 2)
+                            .putBooleanExtra("booleanKey1", true)
+                            .putBooleanExtra("booleanKey2", false)
+                            .putObjectExtra("objKey1", map1)
+                            .putObjectExtra("objKey2", map2)
+                            .startOriginUri(MainActivity.this, "commonRouterActivity");
 
      //对应的Activity
      @RouterUri(path = "commonRouterActivity")
      public class CommonRouterActivity extends AppCompatActivity{
+                                    .
+                                    .
+                                    .
+        JumpDataModel jumpDataModel = JumpDataModel.getInstance();
+        String name = jumpDataModel.getStringExtra(userName);
+        String age = jumpDataModel.getStringExtra(userAge);
+        int intValue1 = jumpDataModel.getIntExtra("intKey1", -1);
+        int intValue2 = jumpDataModel.getIntExtra("intKey2", -1);
+        boolean bValue1 = jumpDataModel.getBooleanExtra("booleanKey1", false);
+        boolean bValue2 = jumpDataModel.getBooleanExtra("booleanKey2", false);
+        HashMap map1 = jumpDataModel.getObjectExtra("objKey1", HashMap.class);
+        HashMap map2 = jumpDataModel.getObjectExtra("objKey2", HashMap.class);
 
      }
      ```
@@ -57,7 +75,7 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     //获取指定任意类型参数
     jumpDataModel.getObjectExtra("key", HashMap.class)
     ```
-* 添加路由拦截器。继承UriInterceptor，实现intercept()拦截方法即可。
+* 可以添加一个或多个路由拦截器。继承UriInterceptor，实现intercept()拦截方法即可。
     ``` java
     public class LocationInterceptor implements UriInterceptor {
         @Override
@@ -66,6 +84,21 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
             Log.e("Interceptor", "定位拦截器执行");
             callback.onNext();
         }
+    }
+
+    public class LoginInterceptor implements UriInterceptor {
+        @Override
+        public void intercept(@NonNull Context context, @NonNull UriCallback callback) {
+            //TODO 可进行跳转前的一些逻辑判断,如判断登录状态
+            Log.e("Interceptor","登录拦截器执行");
+            callback.onNext();
+        }
+    }
+
+    //对应Activity
+    @RouterUri(path = "commonRouterActivity", interceptors = {LoginInterceptor.class,LocationInterceptor.class})
+    public class CommonRouterActivity extends AppCompatActivity {
+
     }
     ```
 
