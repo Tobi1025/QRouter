@@ -5,8 +5,10 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
 ## 功能
 * 封装了`隐示跳转(Web跳转)、显示跳转(原生跳转)`两种跳转方式
 * `链式调用，简单粗暴，一行代码实现页面跳转`
-* 内部通过`Map`实现页面间的`参数传递`
-    * `Map方式`，直接传入已封装了Map的序列化对象JumpDataModel
+* 内部通过`Bundle`实现页面间的`参数传递`,支持任何类型的参数，调用时与Android原生api一样，有种熟悉的感觉
+* 支持startActivityForResult
+* 支持设置Activity切换动画
+* 支持设置Intent的Flags
 * 可以添加一个或多个路由拦截器，在跳转前处理一些逻辑，如：登录判断、定位获取等
 ## 注意
 * 隐示路由跳转优先从路由表相应的配置的方法注解里获取Action、Scheme、Host、Port的值，
@@ -22,14 +24,7 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
 * 显示(原生跳转)
     ``` java
     RouterBuilder.getBuilder()
-                            .putStringExtra(CommonRouterActivity.userName, "str-origin")
-                            .putStringExtra(CommonRouterActivity.userAge, "str-22")
-                            .putIntExtra("intKey1", 1)
-                            .putIntExtra("intKey2", 2)
-                            .putBooleanExtra("booleanKey1", true)
-                            .putBooleanExtra("booleanKey2", false)
-                            .putObjectExtra("objKey1", map1)
-                            .putObjectExtra("objKey2", map2)
+                            .putExtra(CommonRouterActivity.userName, "str-origin")
                             .startOriginUri(MainActivity.this, "commonRouterActivity");
 
      //对应的Activity
@@ -38,23 +33,13 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
                                     .
                                     .
                                     .
-        JumpDataModel jumpDataModel = JumpDataModel.getInstance();
-        String name = jumpDataModel.getStringExtra(userName);
-        String age = jumpDataModel.getStringExtra(userAge);
-        int intValue1 = jumpDataModel.getIntExtra("intKey1", -1);
-        int intValue2 = jumpDataModel.getIntExtra("intKey2", -1);
-        boolean bValue1 = jumpDataModel.getBooleanExtra("booleanKey1", false);
-        boolean bValue2 = jumpDataModel.getBooleanExtra("booleanKey2", false);
-        HashMap map1 = jumpDataModel.getObjectExtra("objKey1", HashMap.class);
-        HashMap map2 = jumpDataModel.getObjectExtra("objKey2", HashMap.class);
-
+       String userName =  intent.getStringExtra();//与原生api一样
      }
      ```
 * 隐示(Web跳转)
     ``` java
     RouterBuilder.getBuilder()
-            .putStringExtra(SecondActivity.userName, "web")
-            .putStringExtra(SecondActivity.userAge, "18")
+            .putExtra(SecondActivity.userName, "web")
             .startWebUri(MainActivity.this, "/jumpSecondActivity");
 
     //对应的Activity
@@ -65,15 +50,7 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     ```
 * 获取参数
     ``` java
-    JumpDataModel jumpDataModel = JumpDataModel.getInstance();
-    //获取String类型参数
-    jumpDataModel.getStringExtra("key")
-    //获取int类型参数
-    jumpDataModel.getIntExtra("key")
-    //获取boolean类型参数
-    jumpDataModel.getBooleanExtra("key")
-    //获取指定任意类型参数
-    jumpDataModel.getObjectExtra("key", HashMap.class)
+    String userName =  intent.getStringExtra();//与原生api一样
     ```
 * 可以添加一个或多个路由拦截器。继承UriInterceptor，实现intercept()拦截方法即可。
     ``` java
@@ -100,5 +77,19 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     public class CommonRouterActivity extends AppCompatActivity {
 
     }
+    ```
+* 混淆配置
+    ``` java
+-keep class com.personal.joefly.interfaces.**{*;}
+-dontwarn com.personal.joefly.interfaces.**
+
+-keep class com.personal.joefly.compile.**{*;}
+-dontwarn com.personal.joefly.compile.**
+
+-keep class com.personal.joefly.qrouter.uri.**{*;}
+-dontwarn com.personal.joefly.qrouter.uri.**
+
+-keep class com.personal.joefly.qrouter.api.**{*;}
+-dontwarn com.personal.joefly.qrouter.api.**
     ```
 
