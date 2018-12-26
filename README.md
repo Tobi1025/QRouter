@@ -25,6 +25,9 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     ``` java
     RouterBuilder.getBuilder()
                             .putExtra(CommonRouterActivity.userName, "str-origin")
+                            .activityRequestCode(1001)
+                            .overridePendingTransition(R.anim.enter,R.anim.exit)
+                            .setIntentFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .startOriginUri(MainActivity.this, "commonRouterActivity");
 
      //对应的Activity
