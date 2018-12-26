@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RouterBuilder.getBuilder()
-                        .putStringExtra(SecondActivity.userName, "web")
-                        .putStringExtra(SecondActivity.userAge, "18")
+                        .putExtra(SecondActivity.userName, "web")
+                        .putExtra(SecondActivity.userAge, "18")
                         .startWebUri(MainActivity.this, "/jumpSecondActivity");
 
             }
@@ -34,19 +34,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_common_skip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> map1 = new HashMap<>();
-                map1.put("objMapKey1", "objMapValue1");
-                HashMap<String, Integer> map2 = new HashMap<>();
-                map2.put("objMapKey2", 2);
                 RouterBuilder.getBuilder()
-                        .putStringExtra(CommonRouterActivity.userName, "str-origin")
-                        .putStringExtra(CommonRouterActivity.userAge, "str-22")
-                        .putIntExtra("intKey1", 1)
-                        .putIntExtra("intKey2", 2)
-                        .putBooleanExtra("booleanKey1", true)
-                        .putBooleanExtra("booleanKey2", false)
-                        .putObjectExtra("objKey1", map1)
-                        .putObjectExtra("objKey2", map2)
+                        .putExtra(CommonRouterActivity.userName, "str-origin")
                         .startOriginUri(MainActivity.this, "commonRouterActivity");
             }
         });

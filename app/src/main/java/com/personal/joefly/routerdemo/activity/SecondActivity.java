@@ -1,5 +1,6 @@
 package com.personal.joefly.routerdemo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ public class SecondActivity extends AppCompatActivity {
     //页面跳转时传递的参数KEY值
     public static String userName = "user_name";
     public static String userAge = "user_age";
+    private String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +24,9 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        JumpDataModel jumpDataModel = JumpDataModel.getInstance();
-        if (jumpDataModel != null) {
-            String name = jumpDataModel.getStringExtra(userName);
-            String age = jumpDataModel.getStringExtra(userAge);
-            Log.e("JumpData==",
-                    "str1 = " + name + ",str2 = " + age
-            );
+        Intent intent = getIntent();
+        if (intent != null) {
+            Log.e(TAG, "userName = " + intent.getStringExtra(userName));
         }
     }
 }

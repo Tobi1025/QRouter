@@ -23,3 +23,17 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+#Qrouter 路由混淆配置
+-keep class com.personal.joefly.interfaces.**{*;}
+-dontwarn com.personal.joefly.interfaces.**
+
+-keep class com.personal.joefly.compile.**{*;}
+-dontwarn com.personal.joefly.compile.**
+
+-keep class com.personal.joefly.qrouter.uri.**{*;}
+-dontwarn com.personal.joefly.qrouter.uri.**
+
+-keep class com.personal.joefly.qrouter.api.**{*;}
+-dontwarn com.personal.joefly.qrouter.api.**

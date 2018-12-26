@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,7 +36,6 @@ public class AnnotationParse {
     private Context context;
     private static final String TAG = AnnotationParse.class.getSimpleName();
     private String url = "";
-    private JumpDataModel paramsModel;
     private String mAction = Intent.ACTION_VIEW;
     private RouterBuilder builder;
     private String targetActivityRoutePath;
@@ -68,12 +68,27 @@ public class AnnotationParse {
                     if (activityClassMap.containsKey(targetActivityRoutePath)) {
                         Class<?> clazz = activityClassMap.get(targetActivityRoutePath);
                         Intent intent = new Intent(context, clazz);
-//            if (paramsModel != null) {
-//                intent.putExtra(JumpDataModel.KEY, paramsModel);
-//            }
-                        context.startActivity(intent);
+                        //intent参数
+                        intent.putExtras(builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA));
+                        // Flags
+                        Integer flags = builder.getField(Integer.class, JumpDataModel.FIELD_START_ACTIVITY_FLAGS);
+                        if (flags != null) {
+                            intent.setFlags(flags);
+                        }
+                        //requestCode
+                        Integer requestCode = builder.getField(Integer.class, JumpDataModel.FIELD_REQUEST_CODE);
+                        if (requestCode != null && context instanceof Activity) {
+                            ((Activity) context).startActivityForResult(intent, requestCode);
+                        } else {
+                            context.startActivity(intent);
+                        }
+                        //Activity切换动画
+                        int[] anim = builder.getField(int[].class, JumpDataModel.FIELD_START_ACTIVITY_ANIMATION);
+                        if (context instanceof Activity && anim != null && anim.length == 2) {
+                            ((Activity) context).overridePendingTransition(anim[0], anim[1]);
+                        }
                     } else {
-                        Toast.makeText(context, "没有找到对应的path", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "没有找到对应的path");
                     }
                 }
 
@@ -102,14 +117,29 @@ public class AnnotationParse {
                     Log.e("Interceptor", targetActivityRoutePath + " 所有Interceptor已执行完成");
                     PackageManager packageManager = context.getPackageManager();
                     Intent intent = new Intent(mAction, Uri.parse(url));
-//        if (paramsModel != null) {
-//            intent.putExtra(JumpDataModel.KEY, paramsModel);
-//        }
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //intent参数
+                    intent.putExtras(builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA));
+                    // Flags
+                    Integer flags = builder.getField(Integer.class, JumpDataModel.FIELD_START_ACTIVITY_FLAGS);
+                    if (flags != null) {
+                        intent.setFlags(flags);
+                    }
                     List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
                     boolean isValid = !activities.isEmpty();
                     if (isValid) {
-                        context.startActivity(intent);
+                        //requestCode
+                        Integer requestCode = builder.getField(Integer.class, JumpDataModel.FIELD_REQUEST_CODE);
+                        if (requestCode != null && context instanceof Activity) {
+                            ((Activity) context).startActivityForResult(intent, requestCode);
+                        } else {
+                            context.startActivity(intent);
+                        }
+                    }
+
+                    //Activity切换动画
+                    int[] anim = builder.getField(int[].class, JumpDataModel.FIELD_START_ACTIVITY_ANIMATION);
+                    if (context instanceof Activity && anim != null && anim.length == 2) {
+                        ((Activity) context).overridePendingTransition(anim[0], anim[1]);
                     }
                 }
 
@@ -141,6 +171,8 @@ public class AnnotationParse {
         if (null != scheme) {
             String value = scheme.value();
             url += (TextUtils.isEmpty(value) ? builder.getScheme() : value);
+        } else {
+            url += builder.getScheme();
         }
         /*拼接主机参数*/
         Host host = method.getAnnotation(Host.class);
@@ -148,6 +180,9 @@ public class AnnotationParse {
             String value = host.value();
             url += "://";
             url += (TextUtils.isEmpty(value) ? builder.getHost() : value);
+        } else {
+            url += "://";
+            url += builder.getHost();
         }
         /*拼接端口参数*/
         Port port = method.getAnnotation(Port.class);
@@ -155,6 +190,11 @@ public class AnnotationParse {
             String value = port.value();
             url += ":";
             url += (TextUtils.isEmpty(value) ? builder.getPort() : value);
+        } else {
+            if (!TextUtils.isEmpty(builder.getPort())) {
+                url += ":";
+                url += builder.getPort();
+            }
         }
         /*拼接路径参数*/
 //        Path path = method.getAnnotation(Path.class);
@@ -179,10 +219,7 @@ public class AnnotationParse {
             for (int j = 0; j < annotationsArrays.length; j++) {
                 Annotation annotationsItem = annotationsArrays[j];
                 if (annotationsItem instanceof RouterParam) {
-                    if (args[i] instanceof JumpDataModel) {
-                        paramsModel = ((JumpDataModel) args[i]);
-                    } else if (args[i] instanceof String) {
-                        paramsModel = null;
+                    if (args[i] instanceof String) {
                         if (i == 0) {
                             reqParamsBuilder.append("?");
                         } else {
@@ -195,8 +232,12 @@ public class AnnotationParse {
                         reqParamsBuilder.append(args[i]);
                     }
                 } else if (annotationsItem instanceof Path) {
-                    targetActivityRoutePath = (String) args[i];
-                    Log.e(TAG, "targetActivityRoutePath = " + targetActivityRoutePath);
+                    if (args[i] instanceof String) {
+                        targetActivityRoutePath = (String) args[i];
+                        Log.e(TAG, "targetActivityRoutePath = " + targetActivityRoutePath);
+                    } else {
+                        Log.e(TAG, "targetActivityRoutePath : path 类型错误");
+                    }
                 }
             }
 

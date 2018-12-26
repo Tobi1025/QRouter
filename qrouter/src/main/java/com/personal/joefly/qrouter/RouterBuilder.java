@@ -2,7 +2,12 @@ package com.personal.joefly.qrouter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.personal.joefly.qrouter.api.IPageRouterTable;
 import com.personal.joefly.qrouter.core.AnnotationParse;
@@ -12,12 +17,13 @@ import com.personal.joefly.qrouter.intercepter.UriInterceptor;
 import com.personal.joefly.qrouter.model.JumpDataModel;
 import com.personal.joefly.qrouter.model.RouteActivityModel;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.WeakHashMap;
 
 /**
  * Created by qiaojingfei on 2018/8/1.
@@ -32,13 +38,18 @@ public class RouterBuilder extends UriHandler {
     private String host;
     private String port;
     private String path;
-    private static WeakHashMap<String, String> stringMap;
-    private static WeakHashMap<String, Integer> intMap;
-    private static WeakHashMap<String, Boolean> booleanMap;
-    private static WeakHashMap<String, Object> objMap;
-    private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
+//    private static WeakHashMap<String, String> stringMap;
+//    private static WeakHashMap<String, Integer> intMap;
+//    private static WeakHashMap<String, Boolean> booleanMap;
+//    private static WeakHashMap<String, Object> objMap;
+//    private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
+    @NonNull
+    private final HashMap<String, Object> mFields;
+    private static String mdefaultScheme;
+    private static String mdefaultHost;
 
     private RouterBuilder() {
+        mFields = new HashMap<>();
     }
 
     private static class RouterBuilderFactory {
@@ -46,10 +57,10 @@ public class RouterBuilder extends UriHandler {
     }
 
     public static void register(String defaultScheme, String defaultHost) {
-        String scheme = TextUtils.isEmpty(defaultScheme) ? "" : defaultScheme;
-        String host = TextUtils.isEmpty(defaultHost) ? "" : defaultHost;
-        builder.scheme(scheme);
-        builder.host(host);
+        mdefaultScheme = TextUtils.isEmpty(defaultScheme) ? "" : defaultScheme;
+        mdefaultHost = TextUtils.isEmpty(defaultHost) ? "" : defaultHost;
+        builder.scheme(mdefaultScheme);
+        builder.host(mdefaultHost);
         try {
             Class<?> uriAnnotationInit = Class.forName("com.personal.joefly.qrouter.UriAnnotationInit");
             uriAnnotationInit.getMethod("routerInit").invoke(null);
@@ -65,10 +76,12 @@ public class RouterBuilder extends UriHandler {
     }
 
     public static RouterBuilder getBuilder() {
-        stringMap = new WeakHashMap<>();
-        intMap = new WeakHashMap<>();
-        booleanMap = new WeakHashMap<>();
-        objMap = new WeakHashMap<>();
+        builder.scheme = mdefaultScheme;
+        builder.host = mdefaultHost;
+//        stringMap = new WeakHashMap<>();
+//        intMap = new WeakHashMap<>();
+//        booleanMap = new WeakHashMap<>();
+//        objMap = new WeakHashMap<>();
         return builder;
     }
 
@@ -133,7 +146,7 @@ public class RouterBuilder extends UriHandler {
                 return annotationParse.toOriginRoute();
             }
         });
-        routerTable.originSkip(path, jumpDataModel);
+        routerTable.originSkip(path);
     }
 
     public void startWebUri(final Context context, String path) {
@@ -150,32 +163,311 @@ public class RouterBuilder extends UriHandler {
                 return annotationParse.toWebRoute();
             }
         });
-        routerTable.webSkip(path, jumpDataModel);
+        routerTable.webSkip(path);
     }
 
-    public RouterBuilder putStringExtra(String key, String value) {
-        stringMap.put(key, value);
-        jumpDataModel.setStringMap(stringMap);
-        return builder;
+    /**
+     * 用于startActivityForResult的requestCode
+     *
+     * @see Activity#startActivityForResult(Intent, int)
+     */
+    public RouterBuilder activityRequestCode(int requestCode) {
+        putField(JumpDataModel.FIELD_REQUEST_CODE, requestCode);
+        return this;
     }
 
-    public RouterBuilder putIntExtra(String key, int value) {
-        intMap.put(key, value);
-        jumpDataModel.setIntMap(intMap);
-        return builder;
+    /**
+     * 设置Activity切换动画
+     *
+     * @see Activity#overridePendingTransition(int, int)
+     */
+    public RouterBuilder overridePendingTransition(int enterAnim, int exitAnim) {
+        putField(JumpDataModel.FIELD_START_ACTIVITY_ANIMATION,
+                new int[]{enterAnim, exitAnim});
+        return this;
     }
 
-    public RouterBuilder putBooleanExtra(String key, boolean value) {
-        booleanMap.put(key, value);
-        jumpDataModel.setBooleanMap(booleanMap);
-        return builder;
+    /**
+     * 设置Intent的Flags
+     *
+     * @see Intent#setFlags(int)
+     */
+    public RouterBuilder setIntentFlags(int flags) {
+        putField(JumpDataModel.FIELD_START_ACTIVITY_FLAGS, flags);
+        return this;
     }
 
-    public RouterBuilder putObjectExtra(String key, Object value) {
-        objMap.put(key, value);
-        jumpDataModel.setObjectMap(objMap);
-        return builder;
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, boolean value) {
+        extra().putBoolean(name, value);
+        return this;
     }
 
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, byte value) {
+        extra().putByte(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, char value) {
+        extra().putChar(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, short value) {
+        extra().putShort(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, int value) {
+        extra().putInt(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, long value) {
+        extra().putLong(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, float value) {
+        extra().putFloat(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, double value) {
+        extra().putDouble(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, String value) {
+        extra().putString(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, CharSequence value) {
+        extra().putCharSequence(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, Parcelable value) {
+        extra().putParcelable(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, Parcelable[] value) {
+        extra().putParcelableArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putIntentParcelableArrayListExtra(String name,
+                                                               ArrayList<? extends Parcelable> value) {
+        extra().putParcelableArrayList(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putIntentIntegerArrayListExtra(String name, ArrayList<Integer> value) {
+        extra().putIntegerArrayList(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putIntentStringArrayListExtra(String name, ArrayList<String> value) {
+        extra().putStringArrayList(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putIntentCharSequenceArrayListExtra(String name,
+                                                                 ArrayList<CharSequence> value) {
+        extra().putCharSequenceArrayList(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, Serializable value) {
+        extra().putSerializable(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, boolean[] value) {
+        extra().putBooleanArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, byte[] value) {
+        extra().putByteArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, short[] value) {
+        extra().putShortArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, char[] value) {
+        extra().putCharArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, int[] value) {
+        extra().putIntArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, long[] value) {
+        extra().putLongArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, float[] value) {
+        extra().putFloatArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, double[] value) {
+        extra().putDoubleArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, String[] value) {
+        extra().putStringArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, CharSequence[] value) {
+        extra().putCharSequenceArray(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtra(String name, Bundle value) {
+        extra().putBundle(name, value);
+        return this;
+    }
+
+    /**
+     * 附加到Intent的Extra
+     */
+    public RouterBuilder putExtras(Bundle extras) {
+        if (extras != null) {
+            extra().putAll(extras);
+        }
+        return this;
+    }
+    
+
+    @NonNull
+    private synchronized Bundle extra() {
+        Bundle extra = getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA, null);
+        if (extra == null) {
+            extra = new Bundle();
+            putField(JumpDataModel.FIELD_INTENT_EXTRA, extra);
+        }
+        return extra;
+    }
+
+    public <T> T getField(@NonNull Class<T> clazz, @NonNull String key) {
+        return getField(clazz, key, null);
+    }
+
+    private <T> T getField(@NonNull Class<T> clazz, @NonNull String key, T defaultValue) {
+        Object field = mFields.get(key);
+        if (field != null) {
+            try {
+                return clazz.cast(field);
+            } catch (ClassCastException e) {
+                Log.e(TAG, e.toString());
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
+     * 设置Extra参数
+     */
+    private <T> void putField(@NonNull String key, T val) {
+        if (val != null) {
+            mFields.put(key, val);
+        }
+    }
 
 }

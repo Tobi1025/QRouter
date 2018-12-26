@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="jump"
+                    android:host="routerjump"
                     android:path="/jumpSecondActivity"
-                    android:scheme="content" />
+                    android:scheme="qrouter" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.ThirdActivity">
