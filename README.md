@@ -80,16 +80,16 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     ```
 * 混淆配置
     ``` java
--keep class com.personal.joefly.interfaces.**{*;}
--dontwarn com.personal.joefly.interfaces.**
+    -keep class com.personal.joefly.interfaces.**{*;}
+    -dontwarn com.personal.joefly.interfaces.**
 
--keep class com.personal.joefly.compile.**{*;}
--dontwarn com.personal.joefly.compile.**
+    -keep class com.personal.joefly.compile.**{*;}
+    -dontwarn com.personal.joefly.compile.**
 
--keep class com.personal.joefly.qrouter.uri.**{*;}
--dontwarn com.personal.joefly.qrouter.uri.**
+    -keep class com.personal.joefly.qrouter.uri.**{*;}
+    -dontwarn com.personal.joefly.qrouter.uri.**
 
--keep class com.personal.joefly.qrouter.api.**{*;}
--dontwarn com.personal.joefly.qrouter.api.**
+    -keep class com.personal.joefly.qrouter.api.**{*;}
+    -dontwarn com.personal.joefly.qrouter.api.**
     ```
 
