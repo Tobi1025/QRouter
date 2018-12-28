@@ -69,7 +69,10 @@ public class AnnotationParse {
                         Class<?> clazz = activityClassMap.get(targetActivityRoutePath);
                         Intent intent = new Intent(context, clazz);
                         //intent参数
-                        intent.putExtras(builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA));
+                        Bundle extra = builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA);
+                        if (extra != null) {
+                            intent.putExtras(extra);
+                        }
                         // Flags
                         Integer flags = builder.getField(Integer.class, JumpDataModel.FIELD_START_ACTIVITY_FLAGS);
                         if (flags != null) {
@@ -118,7 +121,10 @@ public class AnnotationParse {
                     PackageManager packageManager = context.getPackageManager();
                     Intent intent = new Intent(mAction, Uri.parse(url));
                     //intent参数
-                    intent.putExtras(builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA));
+                    Bundle extra = builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA);
+                    if (extra != null) {
+                        intent.putExtras(extra);
+                    }
                     // Flags
                     Integer flags = builder.getField(Integer.class, JumpDataModel.FIELD_START_ACTIVITY_FLAGS);
                     if (flags != null) {
