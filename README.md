@@ -63,7 +63,7 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
             //TODO 可进行跳转前的一些逻辑判断,如获取位置信息
             Log.e("Interceptor", "定位拦截器执行");
             if (bundle != null) {
-               Log.e(TAG, "userName = " + bundle.getString("user_name"));
+               Log.e(TAG, "userAge = " + bundle.getString("user_age"));
             }
             callback.onNext();
         }
