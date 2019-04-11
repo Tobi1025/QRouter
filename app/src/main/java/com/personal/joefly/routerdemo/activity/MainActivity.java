@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 RouterBuilder.getBuilder()
                         .putExtra(CommonRouterActivity.userName, "str-origin")
+                        .putExtra(CommonRouterActivity.userAge,"18")
                         .startOriginUri(MainActivity.this, "commonRouterActivity");
             }
         });

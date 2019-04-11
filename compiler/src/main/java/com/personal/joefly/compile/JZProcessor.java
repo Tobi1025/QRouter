@@ -37,7 +37,7 @@ public class JZProcessor extends BaseProcessor {
             CodeBlock interceptors = buildInterceptors(getInterceptors(uri));
             String path = uri.path();
             builder.addStatement("com.personal.joefly.qrouter.RouterBuilder.saveRouterClass($S,$T.class$L)", path, ClassName.get((TypeElement) element), interceptors);
-//            builder.addStatement("com.personal.joefly.qrouter.RouterBuilder.saveRouterClass($S,$T.class)", path, ClassName.get((TypeElement) element));
+//            builder.addstatement("com.personal.joefly.qrouter.RouterBuilder.saveRouterClass($S,$T.class)", path, ClassName.get((TypeElement) element));
         }
         MethodSpec methodSpec = MethodSpec.methodBuilder("routerInit")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

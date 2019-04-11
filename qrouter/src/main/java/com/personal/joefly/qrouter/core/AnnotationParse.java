@@ -60,8 +60,10 @@ public class AnnotationParse {
     public boolean toOriginRoute() {
         HashMap<String, InterceptorQueue> routeActivityInterceptorMap = RouteActivityModel.getInstance().getRouteActivityInterceptorMap();
         final HashMap<String, Class<? extends Activity>> activityClassMap = RouteActivityModel.getInstance().getRouteActivityClassMap();
+        //intent参数
+        Bundle extra = builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA);
         if (routeActivityInterceptorMap.containsKey(targetActivityRoutePath)) {
-            routeActivityInterceptorMap.get(targetActivityRoutePath).intercept(context, new UriCallback() {
+            routeActivityInterceptorMap.get(targetActivityRoutePath).intercept(context, extra, new UriCallback() {
                 @Override
                 public void onNext() {
                     Log.e("Interceptor", targetActivityRoutePath + " 所有Interceptor已执行完成");
@@ -113,8 +115,10 @@ public class AnnotationParse {
      */
     public boolean toWebRoute() {
         HashMap<String, InterceptorQueue> routeActivityInterceptorMap = RouteActivityModel.getInstance().getRouteActivityInterceptorMap();
+        //intent参数
+        Bundle extra = builder.getField(Bundle.class, JumpDataModel.FIELD_INTENT_EXTRA);
         if (routeActivityInterceptorMap.containsKey(targetActivityRoutePath)) {
-            routeActivityInterceptorMap.get(targetActivityRoutePath).intercept(context, new UriCallback() {
+            routeActivityInterceptorMap.get(targetActivityRoutePath).intercept(context, extra, new UriCallback() {
                 @Override
                 public void onNext() {
                     Log.e("Interceptor", targetActivityRoutePath + " 所有Interceptor已执行完成");

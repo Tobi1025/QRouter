@@ -1,6 +1,7 @@
 package com.personal.joefly.qrouter.intercepter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import java.util.List;
  * description: 支持添加多个子 {@link UriInterceptor} ，按先后顺序依次异步执行
  * author: qiaojingfei
  * date: 2018/10/17 下午5:08
-*/
+ */
 public class InterceptorQueue implements UriInterceptor {
 
     private final List<UriInterceptor> mInterceptors = new LinkedList<>();
@@ -25,18 +26,18 @@ public class InterceptorQueue implements UriInterceptor {
     }
 
     @Override
-    public void intercept(@NonNull Context context , @NonNull UriCallback callback) {
-        next(mInterceptors.iterator(), context, callback);
+    public void intercept(@NonNull Context context, Bundle bundle, @NonNull UriCallback callback) {
+        next(mInterceptors.iterator(), context, bundle, callback);
     }
 
     private void next(@NonNull final Iterator<UriInterceptor> iterator, @NonNull final Context context,
-                      @NonNull final UriCallback callback) {
+                      final Bundle bundle, @NonNull final UriCallback callback) {
         if (iterator.hasNext()) {
             UriInterceptor t = iterator.next();
-            t.intercept(context, new UriCallback() {
+            t.intercept(context, bundle, new UriCallback() {
                 @Override
                 public void onNext() {
-                    next(iterator, context, callback);
+                    next(iterator, context, bundle, callback);
                 }
 
                 @Override
