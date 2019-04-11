@@ -59,18 +59,24 @@ Android 路由框架，实现页面跳转的统一管理并与Activity解耦
     ``` java
     public class LocationInterceptor implements UriInterceptor {
         @Override
-        public void intercept(@NonNull Context context, @NonNull UriCallback callback) {
+        public void intercept(@NonNull Context context,Bundle bundle, @NonNull UriCallback callback) {
             //TODO 可进行跳转前的一些逻辑判断,如获取位置信息
             Log.e("Interceptor", "定位拦截器执行");
+            if (bundle != null) {
+               Log.e(TAG, "userName = " + bundle.getString("user_name"));
+            }
             callback.onNext();
         }
     }
 
     public class LoginInterceptor implements UriInterceptor {
         @Override
-        public void intercept(@NonNull Context context, @NonNull UriCallback callback) {
+        public void intercept(@NonNull Context context, Bundle bundle,@NonNull UriCallback callback) {
             //TODO 可进行跳转前的一些逻辑判断,如判断登录状态
             Log.e("Interceptor","登录拦截器执行");
+            if (bundle != null) {
+                Log.e(TAG, "userName = " + bundle.getString("user_name"));
+            }
             callback.onNext();
         }
     }
