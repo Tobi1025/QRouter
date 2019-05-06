@@ -5,11 +5,8 @@ import android.content.Context;
 import com.personal.joefly.qrouter.RouterBuilder;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 public class UriHandler {
-    private Map<Method, AnnotationParse> serviceMethodCache = new HashMap<>();
 
     /**
      * 解析注解
@@ -22,7 +19,6 @@ public class UriHandler {
      */
     public AnnotationParse loadServiceMethod(RouterBuilder builder, Context context, Method method, Object[] args) {
         AnnotationParse serviceMethod = new AnnotationParse(builder);
-        this.serviceMethodCache.put(method, serviceMethod);
         serviceMethod.parseAnnotation(context, method, args);
         return serviceMethod;
     }
