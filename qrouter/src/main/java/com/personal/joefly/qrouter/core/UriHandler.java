@@ -21,13 +21,8 @@ public class UriHandler {
      * @return
      */
     public AnnotationParse loadServiceMethod(RouterBuilder builder, Context context, Method method, Object[] args) {
-        AnnotationParse serviceMethod = serviceMethodCache.get(method);
-        if (null != serviceMethod)
-            return serviceMethod;
-        synchronized (serviceMethodCache) {
-            serviceMethod = new AnnotationParse(builder);
-            serviceMethodCache.put(method, serviceMethod);
-        }
+        AnnotationParse serviceMethod = new AnnotationParse(builder);
+        this.serviceMethodCache.put(method, serviceMethod);
         serviceMethod.parseAnnotation(context, method, args);
         return serviceMethod;
     }
