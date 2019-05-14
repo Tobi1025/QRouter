@@ -38,13 +38,12 @@ public class RouterBuilder extends UriHandler {
     private String host;
     private String port;
     private String path;
-//    private static WeakHashMap<String, String> stringMap;
+    //    private static WeakHashMap<String, String> stringMap;
 //    private static WeakHashMap<String, Integer> intMap;
 //    private static WeakHashMap<String, Boolean> booleanMap;
 //    private static WeakHashMap<String, Object> objMap;
 //    private static JumpDataModel jumpDataModel = JumpDataModel.getInstance();
-    @NonNull
-    private final HashMap<String, Object> mFields;
+    private static HashMap<String, Object> mFields;
     private static String mdefaultScheme;
     private static String mdefaultHost;
 
@@ -82,6 +81,9 @@ public class RouterBuilder extends UriHandler {
 //        intMap = new WeakHashMap<>();
 //        booleanMap = new WeakHashMap<>();
 //        objMap = new WeakHashMap<>();
+        if (mFields != null) {
+            mFields.clear();
+        }
         return builder;
     }
 
@@ -298,7 +300,7 @@ public class RouterBuilder extends UriHandler {
      * 附加到Intent的Extra
      */
     public RouterBuilder putIntentParcelableArrayListExtra(String name,
-                                                               ArrayList<? extends Parcelable> value) {
+                                                           ArrayList<? extends Parcelable> value) {
         extra().putParcelableArrayList(name, value);
         return this;
     }
@@ -323,7 +325,7 @@ public class RouterBuilder extends UriHandler {
      * 附加到Intent的Extra
      */
     public RouterBuilder putIntentCharSequenceArrayListExtra(String name,
-                                                                 ArrayList<CharSequence> value) {
+                                                             ArrayList<CharSequence> value) {
         extra().putCharSequenceArrayList(name, value);
         return this;
     }
@@ -433,7 +435,7 @@ public class RouterBuilder extends UriHandler {
         }
         return this;
     }
-    
+
 
     @NonNull
     private synchronized Bundle extra() {
