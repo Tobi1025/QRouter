@@ -15,7 +15,8 @@ public @interface RouterUri {
     /**
      * 路由path
      */
-    String path() default "";
+    String[] path() default {};
+
     /**
      * 要添加的interceptors
      */
